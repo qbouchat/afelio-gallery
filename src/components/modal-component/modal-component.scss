@@ -1,0 +1,94 @@
+.modal {
+	position: fixed;
+	top: 0; right: 0; bottom: 0; left: 0;
+	background-color: rgba(0, 0, 0, 0.5);
+
+
+
+	.header {
+		position: fixed;
+		top: 10px;
+		right: 10px;
+
+		.header__btn {
+			position: relative;
+			width: 30px;
+			height: 30px;
+			margin-left: 10px;
+			padding: 0;
+
+			border: none;
+			background: transparent;
+			appearance: none;
+
+			cursor: pointer;
+		}
+
+		.btn__rotate {
+			background: white;
+		}
+
+		.btn__close {
+			&::before, &::after {
+				content:'';
+				display: block;
+				position: absolute;
+				top: 50%;
+				width: 30px;
+				height: 6px;
+				border-radius: 3px;
+				background: white;
+				transform-origin: center;
+			}
+
+			&::before {
+				transform: translateY(-50%) rotate(45deg);
+			}
+
+			&::after {
+				transform: translateY(-50%) rotate(-45deg);
+			}
+		}
+	}
+
+	.modal__content {
+		display: flex;
+		align-items: center;
+		justify-content: center;
+
+		position: fixed;
+		top: 10%; right: 10%; bottom: 10%; left: 10%;
+
+		img {
+			max-width: 100%;
+			max-height: 100%;
+			transform: rotate(0deg);
+			transition: transform 0.3s ease-in-out;
+		}
+	}
+
+	.btn__previous, .btn__next {
+		position: fixed;
+		top: 50%;
+
+		width: 50px;
+		height: 50px;
+
+		border: none;
+		border-radius: 50%;
+		background: white;
+		appearance: none;
+
+		cursor: pointer;
+
+		transform: translateY(-50%);
+	}
+
+	.btn__previous {
+		left: 20px;
+	}
+
+	.btn__next {
+		right: 20px;
+	}
+}
