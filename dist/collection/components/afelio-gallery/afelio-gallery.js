@@ -15,7 +15,6 @@ export class MyComponent {
                 h("img", { src: image, onClick: () => this.showImage(index) }))))));
     }
     static get is() { return "afelio-gallery"; }
-    static get encapsulation() { return "shadow"; }
     static get originalStyleUrls() { return {
         "$": ["afelio-gallery.scss"]
     }; }

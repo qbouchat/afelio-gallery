@@ -1,4 +1,4 @@
-import { r as registerInstance, h, g as getElement } from './chunk-e06d23be.js';
+import { r as registerInstance, h, g as getElement } from './chunk-322a657b.js';
 
 class MyComponent {
     constructor(hostRef) {

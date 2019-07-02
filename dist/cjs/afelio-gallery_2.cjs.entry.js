@@ -2,7 +2,7 @@
 
 Object.defineProperty(exports, '__esModule', { value: true });
 
-const __chunk_1 = require('./chunk-b2836d05.js');
+const __chunk_1 = require('./chunk-d6318124.js');
 
 class MyComponent {
     constructor(hostRef) {

@@ -3,7 +3,7 @@ import { Component, Prop, h } from '@stencil/core';
 @Component({
 	tag: 'afelio-gallery',
 	styleUrl: 'afelio-gallery.scss',
-	shadow: true
+	shadow: false
 })
 export class MyComponent {
 

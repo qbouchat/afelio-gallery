@@ -11,7 +11,6 @@ const plt = {
     ael: (el, eventName, listener, opts) => el.addEventListener(eventName, listener, opts),
     rel: (el, eventName, listener, opts) => el.removeEventListener(eventName, listener, opts),
 };
-const supportsShadowDom = !!doc.documentElement.attachShadow;
 const supportsConstructibleStylesheets = (() => {
     try {
         new CSSStyleSheet();
@@ -148,7 +147,7 @@ const patchEsm = () => {
 };
 const patchBrowser = async () => {
     // @ts-ignore
-    const importMeta = (typeof document === 'undefined' ? new (require('u' + 'rl').URL)('file:' + __filename).href : (document.currentScript && document.currentScript.src || new URL('chunk-b2836d05.js', document.baseURI).href));
+    const importMeta = (typeof document === 'undefined' ? new (require('u' + 'rl').URL)('file:' + __filename).href : (document.currentScript && document.currentScript.src || new URL('chunk-d6318124.js', document.baseURI).href));
     if (importMeta !== '') {
         return Promise.resolve(new URL('.', importMeta).href);
     }
@@ -253,20 +252,7 @@ const addStyle = (styleContainerNode, tagName, mode, hostElm) => {
     return scopeId;
 };
 const attachStyles = (elm, cmpMeta, mode) => {
-    const styleId = addStyle((supportsShadowDom && elm.shadowRoot)
-        ? elm.shadowRoot
-        : elm.getRootNode(), cmpMeta.$tagName$, mode, elm);
-    if (cmpMeta.$flags$ & 10 /* needsScopedEncapsulation */) {
-        // only required when we're NOT using native shadow dom (slot)
-        // or this browser doesn't support native shadow dom
-        // and this host element was NOT created with SSR
-        // let's pick out the inner content for slot projection
-        // create a node to represent where the original
-        // content was first placed, which is useful later on
-        // DOM WRITE!!
-        elm['s-sc'] = styleId;
-        elm.classList.add(styleId + '-h');
-    }
+    const styleId = addStyle(elm.getRootNode(), cmpMeta.$tagName$, mode, elm);
 };
 const getScopeId = (tagName, mode) => 'sc-' + (tagName);
 
@@ -493,8 +479,6 @@ const updateElement = (oldVnode, newVnode, isSvgMode, memberName) => {
         setAccessor(elm, memberName, oldVnodeAttrs[memberName], newVnodeAttrs[memberName], isSvgMode, newVnode.$flags$);
     }
 };
-
-let scopeId;
 let hostTagName;
 let isSvgMode = false;
 const createElm = (oldParentVNode, newParentVNode, childIndex, parentElm) => {
@@ -514,11 +498,6 @@ const createElm = (oldParentVNode, newParentVNode, childIndex, parentElm) => {
         {
             updateElement(null, newVNode, isSvgMode);
         }
-        if (isDef(scopeId) && elm['s-si'] !== scopeId) {
-            // if there is a scopeId and this is the initial render
-            // then let's add the scopeId as a css class
-            elm.classList.add((elm['s-si'] = scopeId));
-        }
         if (newVNode.$children$) {
             for (i = 0; i < newVNode.$children$.length; ++i) {
                 // create the node
@@ -536,9 +515,6 @@ const createElm = (oldParentVNode, newParentVNode, childIndex, parentElm) => {
 const addVnodes = (parentElm, before, parentVNode, vnodes, startIdx, endIdx) => {
     let containerElm = (parentElm);
     let childNode;
-    if (containerElm.shadowRoot && toLowerCase(containerElm.tagName) === hostTagName) {
-        containerElm = containerElm.shadowRoot;
-    }
     for (; startIdx <= endIdx; ++startIdx) {
         if (vnodes[startIdx]) {
             childNode = createElm(null, parentVNode, startIdx);
@@ -721,10 +697,7 @@ const renderVdom = (hostElm, hostRef, cmpMeta, renderFnResults) => {
     }
     renderFnResults.$flags$ |= 4 /* isHost */;
     hostRef.$vnode$ = renderFnResults;
-    renderFnResults.$elm$ = oldVNode.$elm$ = (hostElm.shadowRoot || hostElm);
-    {
-        scopeId = hostElm['s-sc'];
-    }
+    renderFnResults.$elm$ = oldVNode.$elm$ = (hostElm);
     // synchronous patch
     patch(oldVNode, renderFnResults);
 };
@@ -989,9 +962,6 @@ const initializeComponent = async (elm, hostRef, cmpMeta, hmrVersionId, Cstr) =>
             // this component has styles but we haven't registered them yet
             let style = Cstr.style;
             let scopeId = getScopeId(cmpMeta.$tagName$, hostRef.$modeName$);
-            if (cmpMeta.$flags$ & 8 /* needsShadowDomShim */) {
-                style = await Promise.resolve(require('./shadow-css-984bac74-b2177096.js')).then(m => m.scopeCss(style, scopeId, false));
-            }
             registerStyle(scopeId, style, !!(cmpMeta.$flags$ & 1 /* shadowDomEncapsulation */));
             Cstr.isStyleRegistered = true;
         }
@@ -1078,9 +1048,6 @@ const bootstrapLazy = (lazyBundles, options = {}) => {
             $members$: compactMeta[2],
             $listeners$: compactMeta[3],
         };
-        if (!supportsShadowDom && cmpMeta.$flags$ & 1 /* shadowDomEncapsulation */) {
-            cmpMeta.$flags$ |= 8 /* needsShadowDomShim */;
-        }
         const tagName = cmpMeta.$tagName$;
         const HostElement = class extends HTMLElement {
             // StencilLazyHost
@@ -1093,17 +1060,6 @@ const bootstrapLazy = (lazyBundles, options = {}) => {
                     this['s-rc'] = [];
                 }
                 registerHost(self);
-                if (cmpMeta.$flags$ & 1 /* shadowDomEncapsulation */) {
-                    // this component is using shadow dom
-                    // and this browser supports shadow dom
-                    // add the read-only property "shadowRoot" to the host element
-                    if (supportsShadowDom) {
-                        self.attachShadow({ 'mode': 'open' });
-                    }
-                    else if (!('shadowRoot' in self)) {
-                        self.shadowRoot = self;
-                    }
-                }
             }
             connectedCallback() {
                 connectedCallback(this, cmpMeta);

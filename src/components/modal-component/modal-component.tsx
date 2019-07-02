@@ -5,7 +5,7 @@ import { Image } from '../../models/images.model';
 @Component({
     tag: 'modal-component',
 	styleUrl: 'modal-component.scss',
-	shadow: true
+	shadow: false
 })
 export class ModalComponent {
 

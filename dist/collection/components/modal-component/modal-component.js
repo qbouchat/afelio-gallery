@@ -47,7 +47,6 @@ export class ModalComponent {
             h("button", { class: "btn__next", onClick: this.next.bind(this) })));
     }
     static get is() { return "modal-component"; }
-    static get encapsulation() { return "shadow"; }
     static get originalStyleUrls() { return {
         "$": ["modal-component.scss"]
     }; }
