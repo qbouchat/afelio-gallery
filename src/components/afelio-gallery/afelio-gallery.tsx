@@ -1,17 +1,13 @@
 import { Component, Prop, h } from '@stencil/core';
 
 @Component({
-	tag: 'my-component',
-	styleUrl: 'my-component.scss',
+	tag: 'afelio-gallery',
+	styleUrl: 'afelio-gallery.scss',
 	shadow: true
 })
 export class MyComponent {
 
-	@Prop() images: string[] = [
-		'https://upload.wikimedia.org/wikipedia/commons/6/66/An_up-close_picture_of_a_curious_male_domestic_shorthair_tabby_cat.jpg',
-		'https://news.nationalgeographic.com/content/dam/news/2018/05/17/you-can-train-your-cat/02-cat-training-NationalGeographic_1484324.ngsversion.1526587209178.adapt.1900.1.jpg',
-		'https://pixel.nymag.com/imgs/daily/vulture/2019/03/13/13-captain-marvel-flerken-cat.w700.h700.jpg'
-	];
+	@Prop() images: string[] = [];
 
 
 	private showImage(indexImage: number) {

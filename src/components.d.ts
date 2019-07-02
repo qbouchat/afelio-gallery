@@ -9,47 +9,47 @@ import { HTMLStencilElement, JSXBase } from '@stencil/core/internal';
 
 
 export namespace Components {
+  interface AfelioGallery {
+    'images': string[];
+  }
   interface ModalComponent {
     'imagesLink': string[];
     'indexImageShowed': number;
-  }
-  interface MyComponent {
-    'images': string[];
   }
 }
 
 declare global {
 
 
+  interface HTMLAfelioGalleryElement extends Components.AfelioGallery, HTMLStencilElement {}
+  var HTMLAfelioGalleryElement: {
+    prototype: HTMLAfelioGalleryElement;
+    new (): HTMLAfelioGalleryElement;
+  };
+
   interface HTMLModalComponentElement extends Components.ModalComponent, HTMLStencilElement {}
   var HTMLModalComponentElement: {
     prototype: HTMLModalComponentElement;
     new (): HTMLModalComponentElement;
   };
-
-  interface HTMLMyComponentElement extends Components.MyComponent, HTMLStencilElement {}
-  var HTMLMyComponentElement: {
-    prototype: HTMLMyComponentElement;
-    new (): HTMLMyComponentElement;
-  };
   interface HTMLElementTagNameMap {
+    'afelio-gallery': HTMLAfelioGalleryElement;
     'modal-component': HTMLModalComponentElement;
-    'my-component': HTMLMyComponentElement;
   }
 }
 
 declare namespace LocalJSX {
+  interface AfelioGallery extends JSXBase.HTMLAttributes<HTMLAfelioGalleryElement> {
+    'images'?: string[];
+  }
   interface ModalComponent extends JSXBase.HTMLAttributes<HTMLModalComponentElement> {
     'imagesLink'?: string[];
     'indexImageShowed'?: number;
   }
-  interface MyComponent extends JSXBase.HTMLAttributes<HTMLMyComponentElement> {
-    'images'?: string[];
-  }
 
   interface IntrinsicElements {
+    'afelio-gallery': AfelioGallery;
     'modal-component': ModalComponent;
-    'my-component': MyComponent;
   }
 }
 
