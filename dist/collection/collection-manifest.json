@@ -1,0 +1,13 @@
+{
+  "entries": [
+    "components\\afelio-gallery\\afelio-gallery.js",
+    "components\\modal-component\\modal-component.js"
+  ],
+  "compiler": {
+    "name": "@stencil/core",
+    "version": "1.0.7",
+    "typescriptVersion": "3.5.2"
+  },
+  "collections": [],
+  "bundles": []
+}

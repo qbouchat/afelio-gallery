@@ -1,0 +1,1 @@
+System.register(["./p-6605bacb.system.js"],function(){"use strict";var e,t;return{setters:[function(n){e=n.p;t=n.b}],execute:function(){e().then(function(e){return t([["p-nvskmajh.system",[[1,"afelio-gallery",{images:[16]}],[1,"modal-component",{imagesLink:[16],indexImageShowed:[2,"index-image-showed"],currentRotation:[32]}]]]],{resourcesUrl:e})})}}});
