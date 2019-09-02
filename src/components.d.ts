@@ -10,11 +10,19 @@ import { HTMLStencilElement, JSXBase } from '@stencil/core/internal';
 
 export namespace Components {
   interface AfelioGallery {
+    'closeIconUrl': string;
     'images': string[];
+    'nextIconUrl': string;
+    'previousIconUrl': string;
+    'rotateIconUrl': string;
   }
   interface ModalComponent {
+    'closeIconUrl': string;
     'imagesLink': string[];
     'indexImageShowed': number;
+    'nextIconUrl': string;
+    'previousIconUrl': string;
+    'rotateIconUrl': string;
   }
 }
 
@@ -40,11 +48,19 @@ declare global {
 
 declare namespace LocalJSX {
   interface AfelioGallery extends JSXBase.HTMLAttributes<HTMLAfelioGalleryElement> {
+    'closeIconUrl'?: string;
     'images'?: string[];
+    'nextIconUrl'?: string;
+    'previousIconUrl'?: string;
+    'rotateIconUrl'?: string;
   }
   interface ModalComponent extends JSXBase.HTMLAttributes<HTMLModalComponentElement> {
+    'closeIconUrl'?: string;
     'imagesLink'?: string[];
     'indexImageShowed'?: number;
+    'nextIconUrl'?: string;
+    'previousIconUrl'?: string;
+    'rotateIconUrl'?: string;
   }
 
   interface IntrinsicElements {

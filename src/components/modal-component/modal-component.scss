@@ -20,37 +20,8 @@
 			border: none;
 			background: transparent;
 			appearance: none;
-
-			cursor: pointer;
-		}
-
-		.btn__rotate {
-			background: white;
-		}
-
-		.btn__close {
-			&::before, &::after {
-				content:'';
-				display: block;
-				position: absolute;
-				top: 50%;
-				width: 30px;
-				height: 6px;
-				border-radius: 3px;
-				background: white;
-				transform-origin: center;
-			}
-
-			&::before {
-				transform: translateY(-50%) rotate(45deg);
-			}
-
-			&::after {
-				transform: translateY(-50%) rotate(-45deg);
-			}
 		}
 	}
-
 	.modal__content {
 		display: flex;
 		align-items: center;
@@ -67,6 +38,14 @@
 		}
 	}
 
+	.btn__rotate, .btn__previous, .btn__next, .btn__close {
+		background-color: transparent;;
+		background-position: center center;
+		background-repeat: no-repeat;
+		background-size: contain;
+		cursor: pointer;
+	}
+
 	.btn__previous, .btn__next {
 		position: fixed;
 		top: 50%;
@@ -76,10 +55,7 @@
 
 		border: none;
 		border-radius: 50%;
-		background: white;
 		appearance: none;
-
-		cursor: pointer;
 
 		transform: translateY(-50%);
 	}

@@ -20,27 +20,6 @@
   border: none;
   background: transparent;
   appearance: none;
-  cursor: pointer;
-}
-.modal .header .btn__rotate {
-  background: white;
-}
-.modal .header .btn__close::before, .modal .header .btn__close::after {
-  content: "";
-  display: block;
-  position: absolute;
-  top: 50%;
-  width: 30px;
-  height: 6px;
-  border-radius: 3px;
-  background: white;
-  transform-origin: center;
-}
-.modal .header .btn__close::before {
-  transform: translateY(-50%) rotate(45deg);
-}
-.modal .header .btn__close::after {
-  transform: translateY(-50%) rotate(-45deg);
 }
 .modal .modal__content {
   display: flex;
@@ -58,6 +37,13 @@
   transform: rotate(0deg);
   transition: transform 0.3s ease-in-out;
 }
+.modal .btn__rotate, .modal .btn__previous, .modal .btn__next, .modal .btn__close {
+  background-color: transparent;
+  background-position: center center;
+  background-repeat: no-repeat;
+  background-size: contain;
+  cursor: pointer;
+}
 .modal .btn__previous, .modal .btn__next {
   position: fixed;
   top: 50%;
@@ -65,9 +51,7 @@
   height: 50px;
   border: none;
   border-radius: 50%;
-  background: white;
   appearance: none;
-  cursor: pointer;
   transform: translateY(-50%);
 }
 .modal .btn__previous {

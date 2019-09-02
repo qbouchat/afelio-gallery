@@ -12,6 +12,11 @@ export class ModalComponent {
 	@Element() modal: HTMLElement;
 	modalContent: HTMLElement
 
+	@Prop() previousIconUrl: string;
+	@Prop() nextIconUrl: string;
+	@Prop() rotateIconUrl: string;
+	@Prop() closeIconUrl: string;
+
 	@Prop() imagesLink: string[];
 	@Prop() indexImageShowed: number;
 	@State() currentRotation: number;
@@ -60,8 +65,8 @@ export class ModalComponent {
         return (
             <div class="modal" onClick={(event) => this.handleClickModal(event)}>
 				<div class="header">
-					<button class="header__btn btn__rotate" onClick={this.rotate.bind(this)}></button>
-					<button class="header__btn btn__close" onClick={this.close.bind(this)}></button>
+					<button class="header__btn btn__rotate" style={{'background-image': `url(${this.rotateIconUrl})`}} onClick={this.rotate.bind(this)}></button>
+					<button class="header__btn btn__close" style={{'background-image': `url(${this.closeIconUrl})`}} onClick={this.close.bind(this)}></button>
 				</div>
 
 				<div class="modal__content" ref={(el) => this.modalContent = el as HTMLInputElement}>
@@ -72,8 +77,8 @@ export class ModalComponent {
 					})}
 				</div>
 
-				<button class="btn__previous" onClick={this.previous.bind(this)}></button>
-				<button class="btn__next" onClick={this.next.bind(this)}></button>
+				<button class="btn__previous" style={{'background-image': `url(${this.previousIconUrl})`}} onClick={this.previous.bind(this)}></button>
+				<button class="btn__next" style={{'background-image': `url(${this.nextIconUrl})`}} onClick={this.next.bind(this)}></button>
             </div>
         );
     }
