@@ -1,20 +1,24 @@
 import { h } from '@stencil/core';
 export class MyComponent {
     constructor() {
-        this.images = [
-            'http://poizo.eu/assets/SVG/blorb.svg',
-            'https://mir-s3-cdn-cf.behance.net/project_modules/1400_opt_1/06198253956937.59480e2e53bc9.png',
-            'https://mir-s3-cdn-cf.behance.net/project_modules/1400_opt_1/84ab7153956937.59480e2e54f29.png',
-            'https://mir-s3-cdn-cf.behance.net/project_modules/1400_opt_1/52eab553956937.59480e2e54187.png',
-            'https://mir-s3-cdn-cf.behance.net/project_modules/1400_opt_1/db530b53956937.59480e2e544f5.png',
-            'https://mir-s3-cdn-cf.behance.net/project_modules/1400_opt_1/ec53a253956937.59480e2e532b6.png',
-            'https://mir-s3-cdn-cf.behance.net/project_modules/1400_opt_1/387b3953956937.59480e2e553fe.png',
-            'https://mir-s3-cdn-cf.behance.net/project_modules/1400_opt_1/7a0cc153956937.59480e2e549d5.jpg',
-        ];
+        // IMAGES ARRAY
+        this.images = [];
+        ///////
+        //
+        //  ICONS SOURCES PROPS
+        //
+        ///////
         this.previousIconUrl = 'assets/images/SVG/previous.svg';
         this.nextIconUrl = 'assets/images/SVG/next.svg';
         this.rotateIconUrl = 'assets/images/SVG/rotate.svg';
         this.closeIconUrl = 'assets/images/SVG/close.svg';
+        ///////
+        //
+        //  BOOLEAN PROP
+        //
+        ///////
+        this.enableRotate = true;
+        this.backropClickClose = true;
     }
     showImage(indexImage) {
         const el = document.createElement('modal-component');
@@ -24,6 +28,8 @@ export class MyComponent {
         el.nextIconUrl = this.nextIconUrl;
         el.rotateIconUrl = this.rotateIconUrl;
         el.closeIconUrl = this.closeIconUrl;
+        el.enableRotate = this.enableRotate;
+        el.backropClickClose = this.backropClickClose;
         document.body.appendChild(el);
     }
     render() {
@@ -53,7 +59,7 @@ export class MyComponent {
                 "tags": [],
                 "text": ""
             },
-            "defaultValue": "[\n\t\t'http://poizo.eu/assets/SVG/blorb.svg',\n\t\t'https://mir-s3-cdn-cf.behance.net/project_modules/1400_opt_1/06198253956937.59480e2e53bc9.png',\n\t\t'https://mir-s3-cdn-cf.behance.net/project_modules/1400_opt_1/84ab7153956937.59480e2e54f29.png',\n\t\t'https://mir-s3-cdn-cf.behance.net/project_modules/1400_opt_1/52eab553956937.59480e2e54187.png',\n\t\t'https://mir-s3-cdn-cf.behance.net/project_modules/1400_opt_1/db530b53956937.59480e2e544f5.png',\n\t\t'https://mir-s3-cdn-cf.behance.net/project_modules/1400_opt_1/ec53a253956937.59480e2e532b6.png',\n\t\t'https://mir-s3-cdn-cf.behance.net/project_modules/1400_opt_1/387b3953956937.59480e2e553fe.png',\n\t\t'https://mir-s3-cdn-cf.behance.net/project_modules/1400_opt_1/7a0cc153956937.59480e2e549d5.jpg',\n\t\t]"
+            "defaultValue": "[]"
         },
         "previousIconUrl": {
             "type": "string",
@@ -126,6 +132,42 @@ export class MyComponent {
             "attribute": "close-icon-url",
             "reflect": false,
             "defaultValue": "'assets/images/SVG/close.svg'"
+        },
+        "enableRotate": {
+            "type": "boolean",
+            "mutable": false,
+            "complexType": {
+                "original": "boolean",
+                "resolved": "boolean",
+                "references": {}
+            },
+            "required": false,
+            "optional": false,
+            "docs": {
+                "tags": [],
+                "text": ""
+            },
+            "attribute": "enable-rotate",
+            "reflect": false,
+            "defaultValue": "true"
+        },
+        "backropClickClose": {
+            "type": "boolean",
+            "mutable": false,
+            "complexType": {
+                "original": "boolean",
+                "resolved": "boolean",
+                "references": {}
+            },
+            "required": false,
+            "optional": false,
+            "docs": {
+                "tags": [],
+                "text": ""
+            },
+            "attribute": "backrop-click-close",
+            "reflect": false,
+            "defaultValue": "true"
         }
     }; }
 }

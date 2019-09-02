@@ -4,6 +4,8 @@ export declare class MyComponent {
     nextIconUrl: string;
     rotateIconUrl: string;
     closeIconUrl: string;
+    enableRotate: boolean;
+    backropClickClose: boolean;
     private showImage;
     render(): any;
 }

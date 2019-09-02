@@ -21,7 +21,7 @@ export class ModalComponent {
         this.currentRotation = this.images[this.indexImageShowed].rotation;
     }
     handleClickModal(event) {
-        if (event.target === event.currentTarget || event.target === this.modalContent) {
+        if (this.backropClickClose && (event.target === event.currentTarget || event.target === this.modalContent)) {
             this.close();
         }
     }
@@ -36,7 +36,7 @@ export class ModalComponent {
     render() {
         return (h("div", { class: "modal", onClick: (event) => this.handleClickModal(event) },
             h("div", { class: "header" },
-                h("button", { class: "header__btn btn__rotate", style: { 'background-image': `url(${this.rotateIconUrl})` }, onClick: this.rotate.bind(this) }),
+                this.enableRotate && h("button", { class: "header__btn btn__rotate", style: { 'background-image': `url(${this.rotateIconUrl})` }, onClick: this.rotate.bind(this) }),
                 h("button", { class: "header__btn btn__close", style: { 'background-image': `url(${this.closeIconUrl})` }, onClick: this.close.bind(this) })),
             h("div", { class: "modal__content", ref: (el) => this.modalContent = el }, this.images.map((img, index) => {
                 if (img === this.images[this.indexImageShowed]) {
@@ -54,6 +54,40 @@ export class ModalComponent {
         "$": ["modal-component.css"]
     }; }
     static get properties() { return {
+        "enableRotate": {
+            "type": "boolean",
+            "mutable": false,
+            "complexType": {
+                "original": "boolean",
+                "resolved": "boolean",
+                "references": {}
+            },
+            "required": false,
+            "optional": false,
+            "docs": {
+                "tags": [],
+                "text": ""
+            },
+            "attribute": "enable-rotate",
+            "reflect": false
+        },
+        "backropClickClose": {
+            "type": "boolean",
+            "mutable": false,
+            "complexType": {
+                "original": "boolean",
+                "resolved": "boolean",
+                "references": {}
+            },
+            "required": false,
+            "optional": false,
+            "docs": {
+                "tags": [],
+                "text": ""
+            },
+            "attribute": "backrop-click-close",
+            "reflect": false
+        },
         "previousIconUrl": {
             "type": "string",
             "mutable": false,

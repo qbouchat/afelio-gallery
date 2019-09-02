@@ -2,6 +2,8 @@ import { Image } from '../../models/images.model';
 export declare class ModalComponent {
     modal: HTMLElement;
     modalContent: HTMLElement;
+    enableRotate: boolean;
+    backropClickClose: boolean;
     previousIconUrl: string;
     nextIconUrl: string;
     rotateIconUrl: string;

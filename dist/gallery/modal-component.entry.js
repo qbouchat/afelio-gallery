@@ -1,4 +1,4 @@
-import { r as registerInstance, h, c as getElement } from './chunk-d85ca9fa.js';
+import { r as registerInstance, h, c as getElement } from './chunk-acd22472.js';
 
 class Image {
     constructor(url) {
@@ -31,7 +31,7 @@ class ModalComponent {
         this.currentRotation = this.images[this.indexImageShowed].rotation;
     }
     handleClickModal(event) {
-        if (event.target === event.currentTarget || event.target === this.modalContent) {
+        if (this.backropClickClose && (event.target === event.currentTarget || event.target === this.modalContent)) {
             this.close();
         }
     }
@@ -44,7 +44,7 @@ class ModalComponent {
         this.currentRotation = rotation;
     }
     render() {
-        return (h("div", { class: "modal", onClick: (event) => this.handleClickModal(event) }, h("div", { class: "header" }, h("button", { class: "header__btn btn__rotate", style: { 'background-image': `url(${this.rotateIconUrl})` }, onClick: this.rotate.bind(this) }), h("button", { class: "header__btn btn__close", style: { 'background-image': `url(${this.closeIconUrl})` }, onClick: this.close.bind(this) })), h("div", { class: "modal__content", ref: (el) => this.modalContent = el }, this.images.map((img, index) => {
+        return (h("div", { class: "modal", onClick: (event) => this.handleClickModal(event) }, h("div", { class: "header" }, this.enableRotate && h("button", { class: "header__btn btn__rotate", style: { 'background-image': `url(${this.rotateIconUrl})` }, onClick: this.rotate.bind(this) }), h("button", { class: "header__btn btn__close", style: { 'background-image': `url(${this.closeIconUrl})` }, onClick: this.close.bind(this) })), h("div", { class: "modal__content", ref: (el) => this.modalContent = el }, this.images.map((img, index) => {
             if (img === this.images[this.indexImageShowed]) {
                 return (h("img", { key: index, src: this.images[this.indexImageShowed].url, style: { 'transform': `rotate(${this.currentRotation}deg)` } }));
             }

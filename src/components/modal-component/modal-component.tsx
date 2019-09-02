@@ -12,6 +12,9 @@ export class ModalComponent {
 	@Element() modal: HTMLElement;
 	modalContent: HTMLElement
 
+	@Prop() enableRotate: boolean;
+	@Prop() backropClickClose: boolean;
+
 	@Prop() previousIconUrl: string;
 	@Prop() nextIconUrl: string;
 	@Prop() rotateIconUrl: string;
@@ -46,7 +49,7 @@ export class ModalComponent {
 	}
 
 	private handleClickModal(event: MouseEvent) {
-		if (event.target === event.currentTarget || event.target === this.modalContent) {
+		if (this.backropClickClose && (event.target === event.currentTarget || event.target === this.modalContent)) {
 			this.close();
 		}
 	}
@@ -65,7 +68,7 @@ export class ModalComponent {
         return (
             <div class="modal" onClick={(event) => this.handleClickModal(event)}>
 				<div class="header">
-					<button class="header__btn btn__rotate" style={{'background-image': `url(${this.rotateIconUrl})`}} onClick={this.rotate.bind(this)}></button>
+				{this.enableRotate && <button class="header__btn btn__rotate" style={{'background-image': `url(${this.rotateIconUrl})`}} onClick={this.rotate.bind(this)}></button>}
 					<button class="header__btn btn__close" style={{'background-image': `url(${this.closeIconUrl})`}} onClick={this.close.bind(this)}></button>
 				</div>
 
