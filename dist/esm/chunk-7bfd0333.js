@@ -913,6 +913,23 @@ const setValue = (ref, propName, newVal, cmpMeta) => {
         // set our new value!
         hostRef.$instanceValues$.set(propName, newVal);
         if (hostRef.$lazyInstance$) {
+            // get an array of method names of watch functions to call
+            if (cmpMeta.$watchers$ &&
+                (flags & (1 /* hasConnected */ | 8 /* isConstructingInstance */)) === 1 /* hasConnected */) {
+                const watchMethods = cmpMeta.$watchers$[propName];
+                if (watchMethods) {
+                    // this instance is watching for when this property changed
+                    watchMethods.forEach(watchMethodName => {
+                        try {
+                            // fire off each of the watch methods that are watching this property
+                            (hostRef.$lazyInstance$)[watchMethodName].call((hostRef.$lazyInstance$), newVal, oldVal, propName);
+                        }
+                        catch (e) {
+                            consoleError(e);
+                        }
+                    });
+                }
+            }
             if ((flags & (4 /* isActiveRender */ | 2 /* hasRendered */ | 16 /* isQueuedForUpdate */)) === 2 /* hasRendered */) {
                 // looks like this value actually changed, so we've got work to do!
                 // but only if we've already rendered, otherwise just chill out
@@ -926,6 +943,9 @@ const setValue = (ref, propName, newVal, cmpMeta) => {
 
 const proxyComponent = (Cstr, cmpMeta, flags) => {
     if (cmpMeta.$members$) {
+        if (Cstr.watchers) {
+            cmpMeta.$watchers$ = Cstr.watchers;
+        }
         // It's better to have a const than two Object.entries()
         const members = Object.entries(cmpMeta.$members$);
         const prototype = Cstr.prototype;
@@ -981,6 +1001,12 @@ const initializeComponent = async (elm, hostRef, cmpMeta, hmrVersionId, Cstr) =>
             // wired up with the host element
             Cstr = await loadModule(cmpMeta);
             if (!Cstr.isProxied) {
+                // we'eve never proxied this Constructor before
+                // let's add the getters/setters to its prototype before
+                // the first time we create an instance of the implementation
+                {
+                    cmpMeta.$watchers$ = Cstr.watchers;
+                }
                 proxyComponent(Cstr, cmpMeta, 2 /* proxyState */);
                 Cstr.isProxied = true;
             }
@@ -1095,6 +1121,9 @@ const bootstrapLazy = (lazyBundles, options = {}) => {
             $members$: compactMeta[2],
             $listeners$: compactMeta[3],
         };
+        {
+            cmpMeta.$watchers$ = {};
+        }
         const tagName = cmpMeta.$tagName$;
         const HostElement = class extends HTMLElement {
             // StencilLazyHost
@@ -1144,6 +1173,18 @@ const bootstrapLazy = (lazyBundles, options = {}) => {
     head.insertBefore(visibilityStyle, y ? y.nextSibling : head.firstChild);
 };
 
+const createEvent = (ref, name, flags) => {
+    const elm = getElement(ref);
+    return {
+        emit: (detail) => elm.dispatchEvent(new (CustomEvent)(name, {
+            bubbles: !!(flags & 4 /* Bubbles */),
+            composed: !!(flags & 2 /* Composed */),
+            cancelable: !!(flags & 1 /* Cancellable */),
+            detail
+        }))
+    };
+};
+
 const getElement = (ref) => getHostRef(ref).$hostElement$;
 
-export { patchEsm as a, bootstrapLazy as b, getElement as g, h, patchBrowser as p, registerInstance as r };
+export { patchEsm as a, bootstrapLazy as b, createEvent as c, getElement as g, h, patchBrowser as p, registerInstance as r };

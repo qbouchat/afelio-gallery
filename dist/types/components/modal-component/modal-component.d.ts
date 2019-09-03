@@ -1,22 +1,34 @@
+import { EventEmitter } from '../../stencil.core';
 import { Image } from '../../models/images.model';
+import { Action } from '../../models/action.model';
 export declare class ModalComponent {
     modal: HTMLElement;
     modalContent: HTMLElement;
+    deleteImage: EventEmitter;
+    enableDelete: boolean;
+    enableVisualDelete: boolean;
     enableRotate: boolean;
-    backropClickClose: boolean;
+    enableBackdropClickClose: boolean;
     previousIconUrl: string;
     nextIconUrl: string;
     rotateIconUrl: string;
     closeIconUrl: string;
+    deleteIconUrl: string;
     imagesLink: string[];
     indexImageShowed: number;
+    actions: Action[];
     currentRotation: number;
+    showActions: boolean;
     images: Image[];
+    changeImages(images: string[], oldImages: string[]): void;
     componentWillLoad(): void;
     private previous;
     private next;
     private handleClickModal;
     private close;
     private rotate;
+    private delete;
+    private generateActionsListButton;
+    private showActionsList;
     render(): any;
 }

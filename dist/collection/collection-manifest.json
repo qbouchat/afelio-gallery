@@ -1,7 +1,7 @@
 {
   "entries": [
-    "components/afelio-gallery/afelio-gallery.js",
-    "components/modal-component/modal-component.js"
+    "components/modal-component/modal-component.js",
+    "components/afelio-gallery/afelio-gallery.js"
   ],
   "compiler": {
     "name": "@stencil/core",

@@ -6,22 +6,32 @@
 
 
 import { HTMLStencilElement, JSXBase } from './stencil.core';
-
+import {
+  Action,
+} from './models/action.model';
 
 export namespace Components {
   interface AfelioGallery {
-    'backropClickClose': boolean;
+    'actions': Action[];
     'closeIconUrl': string;
+    'deleteIconUrl': string;
+    'enableBackdropClickClose': boolean;
+    'enableDelete': boolean;
     'enableRotate': boolean;
+    'enableVisualDelete': boolean;
     'images': string[];
     'nextIconUrl': string;
     'previousIconUrl': string;
     'rotateIconUrl': string;
   }
   interface ModalComponent {
-    'backropClickClose': boolean;
+    'actions': Action[];
     'closeIconUrl': string;
+    'deleteIconUrl': string;
+    'enableBackdropClickClose': boolean;
+    'enableDelete': boolean;
     'enableRotate': boolean;
+    'enableVisualDelete': boolean;
     'imagesLink': string[];
     'indexImageShowed': number;
     'nextIconUrl': string;
@@ -52,21 +62,30 @@ declare global {
 
 declare namespace LocalJSX {
   interface AfelioGallery extends JSXBase.HTMLAttributes<HTMLAfelioGalleryElement> {
-    'backropClickClose'?: boolean;
+    'actions'?: Action[];
     'closeIconUrl'?: string;
+    'deleteIconUrl'?: string;
+    'enableBackdropClickClose'?: boolean;
+    'enableDelete'?: boolean;
     'enableRotate'?: boolean;
+    'enableVisualDelete'?: boolean;
     'images'?: string[];
     'nextIconUrl'?: string;
     'previousIconUrl'?: string;
     'rotateIconUrl'?: string;
   }
   interface ModalComponent extends JSXBase.HTMLAttributes<HTMLModalComponentElement> {
-    'backropClickClose'?: boolean;
+    'actions'?: Action[];
     'closeIconUrl'?: string;
+    'deleteIconUrl'?: string;
+    'enableBackdropClickClose'?: boolean;
+    'enableDelete'?: boolean;
     'enableRotate'?: boolean;
+    'enableVisualDelete'?: boolean;
     'imagesLink'?: string[];
     'indexImageShowed'?: number;
     'nextIconUrl'?: string;
+    'onDeleteImage'?: (event: CustomEvent<any>) => void;
     'previousIconUrl'?: string;
     'rotateIconUrl'?: string;
   }
