@@ -30,7 +30,7 @@ export class MyComponent {
 	//  BOOLEAN PROP
 	//
 	///////
-	@Prop() enableDelete: boolean = true;
+	@Prop() enableDelete: boolean = false;
 	@Prop() enableVisualDelete: boolean = true;
 	@Prop() enableRotate: boolean = true;
 	@Prop() enableBackdropClickClose: boolean = true;

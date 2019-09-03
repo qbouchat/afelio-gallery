@@ -28,7 +28,7 @@ class MyComponent {
         //  BOOLEAN PROP
         //
         ///////
-        this.enableDelete = true;
+        this.enableDelete = false;
         this.enableVisualDelete = true;
         this.enableRotate = true;
         this.enableBackdropClickClose = true;
