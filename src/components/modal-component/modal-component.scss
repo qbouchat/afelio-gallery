@@ -1,16 +1,16 @@
-.modal {
+.afelio__gallery__modal {
 	position: fixed;
 	top: 0; right: 0; bottom: 0; left: 0;
 	background-color: rgba(0, 0, 0, 0.5);
 
 
 
-	.header {
+	.afelio__gallery__header {
 		position: fixed;
 		top: 10px;
 		right: 10px;
 
-		.header__btn {
+		.afelio__gallery__header__btn {
 			position: relative;
 			width: 30px;
 			height: 30px;
@@ -20,38 +20,9 @@
 			border: none;
 			background: transparent;
 			appearance: none;
-
-			cursor: pointer;
-		}
-
-		.btn__rotate {
-			background: white;
-		}
-
-		.btn__close {
-			&::before, &::after {
-				content:'';
-				display: block;
-				position: absolute;
-				top: 50%;
-				width: 30px;
-				height: 6px;
-				border-radius: 3px;
-				background: white;
-				transform-origin: center;
-			}
-
-			&::before {
-				transform: translateY(-50%) rotate(45deg);
-			}
-
-			&::after {
-				transform: translateY(-50%) rotate(-45deg);
-			}
 		}
 	}
-
-	.modal__content {
+	.afelio__gallery__modal__content {
 		display: flex;
 		align-items: center;
 		justify-content: center;
@@ -67,7 +38,16 @@
 		}
 	}
 
-	.btn__previous, .btn__next {
+	.afelio__gallery__btn__rotate, .afelio__gallery__btn__previous, .afelio__gallery__btn__next, .afelio__gallery__btn__close {
+		background-color: transparent;;
+		background-position: center center;
+		background-repeat: no-repeat;
+		background-size: contain;
+		cursor: pointer;
+		outline: none;
+	}
+
+	.afelio__gallery__btn__previous, .afelio__gallery__btn__next {
 		position: fixed;
 		top: 50%;
 
@@ -76,19 +56,16 @@
 
 		border: none;
 		border-radius: 50%;
-		background: white;
 		appearance: none;
-
-		cursor: pointer;
 
 		transform: translateY(-50%);
 	}
 
-	.btn__previous {
+	.afelio__gallery__btn__previous {
 		left: 20px;
 	}
 
-	.btn__next {
+	.afelio__gallery__btn__next {
 		right: 20px;
 	}
 }

@@ -10,11 +10,23 @@ import { HTMLStencilElement, JSXBase } from './stencil.core';
 
 export namespace Components {
   interface AfelioGallery {
+    'backropClickClose': boolean;
+    'closeIconUrl': string;
+    'enableRotate': boolean;
     'images': string[];
+    'nextIconUrl': string;
+    'previousIconUrl': string;
+    'rotateIconUrl': string;
   }
   interface ModalComponent {
+    'backropClickClose': boolean;
+    'closeIconUrl': string;
+    'enableRotate': boolean;
     'imagesLink': string[];
     'indexImageShowed': number;
+    'nextIconUrl': string;
+    'previousIconUrl': string;
+    'rotateIconUrl': string;
   }
 }
 
@@ -40,11 +52,23 @@ declare global {
 
 declare namespace LocalJSX {
   interface AfelioGallery extends JSXBase.HTMLAttributes<HTMLAfelioGalleryElement> {
+    'backropClickClose'?: boolean;
+    'closeIconUrl'?: string;
+    'enableRotate'?: boolean;
     'images'?: string[];
+    'nextIconUrl'?: string;
+    'previousIconUrl'?: string;
+    'rotateIconUrl'?: string;
   }
   interface ModalComponent extends JSXBase.HTMLAttributes<HTMLModalComponentElement> {
+    'backropClickClose'?: boolean;
+    'closeIconUrl'?: string;
+    'enableRotate'?: boolean;
     'imagesLink'?: string[];
     'indexImageShowed'?: number;
+    'nextIconUrl'?: string;
+    'previousIconUrl'?: string;
+    'rotateIconUrl'?: string;
   }
 
   interface IntrinsicElements {

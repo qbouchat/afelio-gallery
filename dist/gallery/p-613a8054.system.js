@@ -1,1 +1,0 @@
-System.register(["./p-37096484.system.js"],function(){"use strict";var e,t;return{setters:[function(n){e=n.p;t=n.b}],execute:function(){e().then(function(e){return t([["p-szhdub26.system",[[0,"afelio-gallery",{images:[16]}],[0,"modal-component",{imagesLink:[16],indexImageShowed:[2,"index-image-showed"],currentRotation:[32]}]]]],{resourcesUrl:e})})}}});

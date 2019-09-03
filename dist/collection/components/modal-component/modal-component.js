@@ -21,7 +21,7 @@ export class ModalComponent {
         this.currentRotation = this.images[this.indexImageShowed].rotation;
     }
     handleClickModal(event) {
-        if (event.target === event.currentTarget || event.target === this.modalContent) {
+        if (this.backropClickClose && (event.target === event.currentTarget || event.target === this.modalContent)) {
             this.close();
         }
     }
@@ -34,17 +34,17 @@ export class ModalComponent {
         this.currentRotation = rotation;
     }
     render() {
-        return (h("div", { class: "modal", onClick: (event) => this.handleClickModal(event) },
-            h("div", { class: "header" },
-                h("button", { class: "header__btn btn__rotate", onClick: this.rotate.bind(this) }),
-                h("button", { class: "header__btn btn__close", onClick: this.close.bind(this) })),
-            h("div", { class: "modal__content", ref: (el) => this.modalContent = el }, this.images.map((img, index) => {
+        return (h("div", { class: "afelio__gallery__modal", onClick: (event) => this.handleClickModal(event) },
+            h("div", { class: "afelio__gallery__header" },
+                this.enableRotate && h("button", { class: "afelio__gallery__header__btn afelio__gallery__btn__rotate", style: { 'background-image': `url(${this.rotateIconUrl})` }, onClick: this.rotate.bind(this) }),
+                h("button", { class: "afelio__gallery__header__btn afelio__gallery__btn__close", style: { 'background-image': `url(${this.closeIconUrl})` }, onClick: this.close.bind(this) })),
+            h("div", { class: "afelio__gallery__modal__content", ref: (el) => this.modalContent = el }, this.images.map((img, index) => {
                 if (img === this.images[this.indexImageShowed]) {
                     return (h("img", { key: index, src: this.images[this.indexImageShowed].url, style: { 'transform': `rotate(${this.currentRotation}deg)` } }));
                 }
             })),
-            h("button", { class: "btn__previous", onClick: this.previous.bind(this) }),
-            h("button", { class: "btn__next", onClick: this.next.bind(this) })));
+            h("button", { class: "afelio__gallery__btn__previous", style: { 'background-image': `url(${this.previousIconUrl})` }, onClick: this.previous.bind(this) }),
+            h("button", { class: "afelio__gallery__btn__next", style: { 'background-image': `url(${this.nextIconUrl})` }, onClick: this.next.bind(this) })));
     }
     static get is() { return "modal-component"; }
     static get originalStyleUrls() { return {
@@ -54,6 +54,108 @@ export class ModalComponent {
         "$": ["modal-component.css"]
     }; }
     static get properties() { return {
+        "enableRotate": {
+            "type": "boolean",
+            "mutable": false,
+            "complexType": {
+                "original": "boolean",
+                "resolved": "boolean",
+                "references": {}
+            },
+            "required": false,
+            "optional": false,
+            "docs": {
+                "tags": [],
+                "text": ""
+            },
+            "attribute": "enable-rotate",
+            "reflect": false
+        },
+        "backropClickClose": {
+            "type": "boolean",
+            "mutable": false,
+            "complexType": {
+                "original": "boolean",
+                "resolved": "boolean",
+                "references": {}
+            },
+            "required": false,
+            "optional": false,
+            "docs": {
+                "tags": [],
+                "text": ""
+            },
+            "attribute": "backrop-click-close",
+            "reflect": false
+        },
+        "previousIconUrl": {
+            "type": "string",
+            "mutable": false,
+            "complexType": {
+                "original": "string",
+                "resolved": "string",
+                "references": {}
+            },
+            "required": false,
+            "optional": false,
+            "docs": {
+                "tags": [],
+                "text": ""
+            },
+            "attribute": "previous-icon-url",
+            "reflect": false
+        },
+        "nextIconUrl": {
+            "type": "string",
+            "mutable": false,
+            "complexType": {
+                "original": "string",
+                "resolved": "string",
+                "references": {}
+            },
+            "required": false,
+            "optional": false,
+            "docs": {
+                "tags": [],
+                "text": ""
+            },
+            "attribute": "next-icon-url",
+            "reflect": false
+        },
+        "rotateIconUrl": {
+            "type": "string",
+            "mutable": false,
+            "complexType": {
+                "original": "string",
+                "resolved": "string",
+                "references": {}
+            },
+            "required": false,
+            "optional": false,
+            "docs": {
+                "tags": [],
+                "text": ""
+            },
+            "attribute": "rotate-icon-url",
+            "reflect": false
+        },
+        "closeIconUrl": {
+            "type": "string",
+            "mutable": false,
+            "complexType": {
+                "original": "string",
+                "resolved": "string",
+                "references": {}
+            },
+            "required": false,
+            "optional": false,
+            "docs": {
+                "tags": [],
+                "text": ""
+            },
+            "attribute": "close-icon-url",
+            "reflect": false
+        },
         "imagesLink": {
             "type": "unknown",
             "mutable": false,
