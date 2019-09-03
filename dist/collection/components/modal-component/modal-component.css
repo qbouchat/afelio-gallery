@@ -43,6 +43,7 @@
   background-repeat: no-repeat;
   background-size: contain;
   cursor: pointer;
+  outline: none;
 }
 .afelio__gallery__modal .afelio__gallery__btn__previous, .afelio__gallery__modal .afelio__gallery__btn__next {
   position: fixed;
