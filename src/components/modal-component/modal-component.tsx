@@ -66,13 +66,13 @@ export class ModalComponent {
 
     render() {
         return (
-            <div class="modal" onClick={(event) => this.handleClickModal(event)}>
-				<div class="header">
-				{this.enableRotate && <button class="header__btn btn__rotate" style={{'background-image': `url(${this.rotateIconUrl})`}} onClick={this.rotate.bind(this)}></button>}
-					<button class="header__btn btn__close" style={{'background-image': `url(${this.closeIconUrl})`}} onClick={this.close.bind(this)}></button>
+            <div class="afelio__gallery__modal" onClick={(event) => this.handleClickModal(event)}>
+				<div class="afelio__gallery__header">
+				{this.enableRotate && <button class="afelio__gallery__header__btn afelio__gallery__btn__rotate" style={{'background-image': `url(${this.rotateIconUrl})`}} onClick={this.rotate.bind(this)}></button>}
+					<button class="afelio__gallery__header__btn afelio__gallery__btn__close" style={{'background-image': `url(${this.closeIconUrl})`}} onClick={this.close.bind(this)}></button>
 				</div>
 
-				<div class="modal__content" ref={(el) => this.modalContent = el as HTMLInputElement}>
+				<div class="afelio__gallery__modal__content" ref={(el) => this.modalContent = el as HTMLInputElement}>
 					{this.images.map((img, index) => {
 						if (img === this.images[this.indexImageShowed]) {
 							return (<img key={index} src={this.images[this.indexImageShowed].url} style={{'transform': `rotate(${this.currentRotation}deg)`}} />)
@@ -80,8 +80,8 @@ export class ModalComponent {
 					})}
 				</div>
 
-				<button class="btn__previous" style={{'background-image': `url(${this.previousIconUrl})`}} onClick={this.previous.bind(this)}></button>
-				<button class="btn__next" style={{'background-image': `url(${this.nextIconUrl})`}} onClick={this.next.bind(this)}></button>
+				<button class="afelio__gallery__btn__previous" style={{'background-image': `url(${this.previousIconUrl})`}} onClick={this.previous.bind(this)}></button>
+				<button class="afelio__gallery__btn__next" style={{'background-image': `url(${this.nextIconUrl})`}} onClick={this.next.bind(this)}></button>
             </div>
         );
     }

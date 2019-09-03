@@ -4,7 +4,14 @@ class MyComponent {
     constructor(hostRef) {
         registerInstance(this, hostRef);
         // IMAGES ARRAY
-        this.images = [];
+        this.images = [
+            'https://mir-s3-cdn-cf.behance.net/project_modules/max_1200/53ae6c31020211.563d08cd76fee.jpg',
+            'https://mir-s3-cdn-cf.behance.net/project_modules/max_1200/813a4031020211.563d08cd78414.jpg',
+            'https://mir-s3-cdn-cf.behance.net/project_modules/max_1200/53ae6c31020211.563d08cd76fee.jpg',
+            'https://mir-s3-cdn-cf.behance.net/project_modules/max_1200/813a4031020211.563d08cd78414.jpg',
+            'https://mir-s3-cdn-cf.behance.net/project_modules/max_1200/53ae6c31020211.563d08cd76fee.jpg',
+            'https://mir-s3-cdn-cf.behance.net/project_modules/max_1200/813a4031020211.563d08cd78414.jpg',
+        ];
         ///////
         //
         //  ICONS SOURCES PROPS
@@ -35,9 +42,9 @@ class MyComponent {
         document.body.appendChild(el);
     }
     render() {
-        return (h("div", null, h("ul", { class: "gallery__pictures" }, this.images.map((image, index) => h("li", { class: "gallery__pictures__item" }, h("img", { src: image, onClick: () => this.showImage(index) }))))));
+        return (h("div", null, h("ul", { class: "afelio__gallery__pictures" }, this.images.map((image, index) => h("li", { class: "afelio__gallery__pictures__item" }, h("img", { src: image, onClick: () => this.showImage(index) }))))));
     }
-    static get style() { return ".gallery__pictures {\n  display: -ms-flexbox;\n  display: flex;\n  list-style: none;\n  padding: 0;\n  margin: 0;\n}\n.gallery__pictures .gallery__pictures__item {\n  margin-right: 10px;\n}\n.gallery__pictures .gallery__pictures__item img {\n  display: block;\n  height: 100px;\n  width: auto;\n  cursor: pointer;\n}\n.gallery__pictures .gallery__pictures__item:last-child {\n  margin-right: 0;\n}"; }
+    static get style() { return ".afelio__gallery__pictures {\n  display: -ms-flexbox;\n  display: flex;\n  list-style: none;\n  padding: 0;\n  margin: 0;\n}\n.afelio__gallery__pictures .afelio__gallery__pictures__item {\n  margin-right: 10px;\n}\n.afelio__gallery__pictures .afelio__gallery__pictures__item img {\n  display: block;\n  height: 100px;\n  width: auto;\n  cursor: pointer;\n}\n.afelio__gallery__pictures .afelio__gallery__pictures__item:last-child {\n  margin-right: 0;\n}"; }
 }
 
 export { MyComponent as afelio_gallery };

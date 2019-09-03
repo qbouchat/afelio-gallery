@@ -34,17 +34,17 @@ export class ModalComponent {
         this.currentRotation = rotation;
     }
     render() {
-        return (h("div", { class: "modal", onClick: (event) => this.handleClickModal(event) },
-            h("div", { class: "header" },
-                this.enableRotate && h("button", { class: "header__btn btn__rotate", style: { 'background-image': `url(${this.rotateIconUrl})` }, onClick: this.rotate.bind(this) }),
-                h("button", { class: "header__btn btn__close", style: { 'background-image': `url(${this.closeIconUrl})` }, onClick: this.close.bind(this) })),
-            h("div", { class: "modal__content", ref: (el) => this.modalContent = el }, this.images.map((img, index) => {
+        return (h("div", { class: "afelio__gallery__modal", onClick: (event) => this.handleClickModal(event) },
+            h("div", { class: "afelio__gallery__header" },
+                this.enableRotate && h("button", { class: "afelio__gallery__header__btn afelio__gallery__btn__rotate", style: { 'background-image': `url(${this.rotateIconUrl})` }, onClick: this.rotate.bind(this) }),
+                h("button", { class: "afelio__gallery__header__btn afelio__gallery__btn__close", style: { 'background-image': `url(${this.closeIconUrl})` }, onClick: this.close.bind(this) })),
+            h("div", { class: "afelio__gallery__modal__content", ref: (el) => this.modalContent = el }, this.images.map((img, index) => {
                 if (img === this.images[this.indexImageShowed]) {
                     return (h("img", { key: index, src: this.images[this.indexImageShowed].url, style: { 'transform': `rotate(${this.currentRotation}deg)` } }));
                 }
             })),
-            h("button", { class: "btn__previous", style: { 'background-image': `url(${this.previousIconUrl})` }, onClick: this.previous.bind(this) }),
-            h("button", { class: "btn__next", style: { 'background-image': `url(${this.nextIconUrl})` }, onClick: this.next.bind(this) })));
+            h("button", { class: "afelio__gallery__btn__previous", style: { 'background-image': `url(${this.previousIconUrl})` }, onClick: this.previous.bind(this) }),
+            h("button", { class: "afelio__gallery__btn__next", style: { 'background-image': `url(${this.nextIconUrl})` }, onClick: this.next.bind(this) })));
     }
     static get is() { return "modal-component"; }
     static get originalStyleUrls() { return {

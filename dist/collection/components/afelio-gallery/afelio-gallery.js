@@ -2,7 +2,14 @@ import { h } from '@stencil/core';
 export class MyComponent {
     constructor() {
         // IMAGES ARRAY
-        this.images = [];
+        this.images = [
+            'https://mir-s3-cdn-cf.behance.net/project_modules/max_1200/53ae6c31020211.563d08cd76fee.jpg',
+            'https://mir-s3-cdn-cf.behance.net/project_modules/max_1200/813a4031020211.563d08cd78414.jpg',
+            'https://mir-s3-cdn-cf.behance.net/project_modules/max_1200/53ae6c31020211.563d08cd76fee.jpg',
+            'https://mir-s3-cdn-cf.behance.net/project_modules/max_1200/813a4031020211.563d08cd78414.jpg',
+            'https://mir-s3-cdn-cf.behance.net/project_modules/max_1200/53ae6c31020211.563d08cd76fee.jpg',
+            'https://mir-s3-cdn-cf.behance.net/project_modules/max_1200/813a4031020211.563d08cd78414.jpg',
+        ];
         ///////
         //
         //  ICONS SOURCES PROPS
@@ -34,7 +41,7 @@ export class MyComponent {
     }
     render() {
         return (h("div", null,
-            h("ul", { class: "gallery__pictures" }, this.images.map((image, index) => h("li", { class: "gallery__pictures__item" },
+            h("ul", { class: "afelio__gallery__pictures" }, this.images.map((image, index) => h("li", { class: "afelio__gallery__pictures__item" },
                 h("img", { src: image, onClick: () => this.showImage(index) }))))));
     }
     static get is() { return "afelio-gallery"; }
@@ -59,7 +66,7 @@ export class MyComponent {
                 "tags": [],
                 "text": ""
             },
-            "defaultValue": "[]"
+            "defaultValue": "[\n\t\t'https://mir-s3-cdn-cf.behance.net/project_modules/max_1200/53ae6c31020211.563d08cd76fee.jpg',\n\t\t'https://mir-s3-cdn-cf.behance.net/project_modules/max_1200/813a4031020211.563d08cd78414.jpg',\n\t\t'https://mir-s3-cdn-cf.behance.net/project_modules/max_1200/53ae6c31020211.563d08cd76fee.jpg',\n\t\t'https://mir-s3-cdn-cf.behance.net/project_modules/max_1200/813a4031020211.563d08cd78414.jpg',\n\t\t'https://mir-s3-cdn-cf.behance.net/project_modules/max_1200/53ae6c31020211.563d08cd76fee.jpg',\n\t\t'https://mir-s3-cdn-cf.behance.net/project_modules/max_1200/813a4031020211.563d08cd78414.jpg',\n\t]"
         },
         "previousIconUrl": {
             "type": "string",

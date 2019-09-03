@@ -8,7 +8,14 @@ import { Component, Prop, h } from '@stencil/core';
 export class MyComponent {
 
 	// IMAGES ARRAY
-	@Prop() images: string[] = [];
+	@Prop() images: string[] = [
+		'https://mir-s3-cdn-cf.behance.net/project_modules/max_1200/53ae6c31020211.563d08cd76fee.jpg',
+		'https://mir-s3-cdn-cf.behance.net/project_modules/max_1200/813a4031020211.563d08cd78414.jpg',
+		'https://mir-s3-cdn-cf.behance.net/project_modules/max_1200/53ae6c31020211.563d08cd76fee.jpg',
+		'https://mir-s3-cdn-cf.behance.net/project_modules/max_1200/813a4031020211.563d08cd78414.jpg',
+		'https://mir-s3-cdn-cf.behance.net/project_modules/max_1200/53ae6c31020211.563d08cd76fee.jpg',
+		'https://mir-s3-cdn-cf.behance.net/project_modules/max_1200/813a4031020211.563d08cd78414.jpg',
+	];
 
 	///////
 	//
@@ -44,9 +51,9 @@ export class MyComponent {
 	render() {
 		return (
 			<div>
-				<ul class="gallery__pictures">
+				<ul class="afelio__gallery__pictures">
 					{this.images.map((image, index) =>
-						<li class="gallery__pictures__item">
+						<li class="afelio__gallery__pictures__item">
 							<img src={image} onClick={() => this.showImage(index)} />
 						</li>
 					)}
