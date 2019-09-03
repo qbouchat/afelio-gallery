@@ -28,6 +28,8 @@ export class ModalComponent {
 
 	componentWillLoad() {
 		this.images = this.imagesLink.map((img) => new Image(img));
+		console.log(this.nextIconUrl);
+
 	}
 
 	private previous() {
@@ -68,8 +70,8 @@ export class ModalComponent {
         return (
             <div class="afelio__gallery__modal" onClick={(event) => this.handleClickModal(event)}>
 				<div class="afelio__gallery__header">
-				{this.enableRotate && <button class="afelio__gallery__header__btn afelio__gallery__btn__rotate" style={{'background-image': `url(${this.rotateIconUrl})`}} onClick={this.rotate.bind(this)}></button>}
-					<button class="afelio__gallery__header__btn afelio__gallery__btn__close" style={{'background-image': `url(${this.closeIconUrl})`}} onClick={this.close.bind(this)}></button>
+				{this.enableRotate && <button class="afelio__gallery__header__btn afelio__gallery__btn__rotate" style={{'background-image': `url('${this.rotateIconUrl}')`}} onClick={this.rotate.bind(this)}></button>}
+					<button class="afelio__gallery__header__btn afelio__gallery__btn__close" style={{'background-image': `url('${this.closeIconUrl}')`}} onClick={this.close.bind(this)}></button>
 				</div>
 
 				<div class="afelio__gallery__modal__content" ref={(el) => this.modalContent = el as HTMLInputElement}>
@@ -80,8 +82,8 @@ export class ModalComponent {
 					})}
 				</div>
 
-				<button class="afelio__gallery__btn__previous" style={{'background-image': `url(${this.previousIconUrl})`}} onClick={this.previous.bind(this)}></button>
-				<button class="afelio__gallery__btn__next" style={{'background-image': `url(${this.nextIconUrl})`}} onClick={this.next.bind(this)}></button>
+				<button class="afelio__gallery__btn__previous" style={{'background-image': `url('${this.previousIconUrl}')`}} onClick={this.previous.bind(this)}></button>
+				<button class="afelio__gallery__btn__next" style={{'background-image': `url('${this.nextIconUrl}')`}} onClick={this.next.bind(this)}></button>
             </div>
         );
     }

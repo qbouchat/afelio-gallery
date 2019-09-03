@@ -2,7 +2,7 @@
 
 Object.defineProperty(exports, '__esModule', { value: true });
 
-const __chunk_1 = require('./chunk-4bfae5d5.js');
+const __chunk_1 = require('./chunk-f0e376f3.js');
 
 const defineCustomElements = (win, options) => {
   return __chunk_1.patchEsm().then(() => {

@@ -128,6 +128,10 @@ const writeTask = /*@__PURE__*/ queueTask(queueDomWrites);
  * Don't add values to these!!
  */
 const EMPTY_OBJ = {};
+/**
+ * Namespaces
+ */
+const SVG_NS = 'http://www.w3.org/2000/svg';
 
 const isDef = (v) => v != null;
 const toLowerCase = (str) => str.toLowerCase();
@@ -147,7 +151,7 @@ const patchEsm = () => {
 };
 const patchBrowser = async () => {
     // @ts-ignore
-    const importMeta = (typeof document === 'undefined' ? new (require('u' + 'rl').URL)('file:' + __filename).href : (document.currentScript && document.currentScript.src || new URL('chunk-4bfae5d5.js', document.baseURI).href));
+    const importMeta = (typeof document === 'undefined' ? new (require('u' + 'rl').URL)('file:' + __filename).href : (document.currentScript && document.currentScript.src || new URL('chunk-f0e376f3.js', document.baseURI).href));
     if (importMeta !== '') {
         return Promise.resolve(new URL('.', importMeta).href);
     }
@@ -191,6 +195,7 @@ const patchDynamicImport = (base) => {
     }
 };
 const HYDRATED_CLASS = 'hydrated';
+const XLINK_NS = 'http://www.w3.org/1999/xlink';
 
 const rootAppliedStyles = new WeakMap();
 const registerStyle = (scopeId, cssText, allowCS) => {
@@ -444,14 +449,28 @@ const setAccessor = (elm, memberName, oldValue, newValue, isSvg, flags) => {
             }
             catch (e) { }
         }
+        /**
+         * Need to manually update attribute if:
+         * - memberName is not an attribute
+         * - if we are rendering the host element in order to reflect attribute
+         * - if it's a SVG, since properties might not work in <svg>
+         * - if the newValue is null/undefined or 'false'.
+         */
+        const isXlinkNs = isSvg && (memberName !== (memberName = memberName.replace(/^xlink\:?/, ''))) ? true : false;
         if (newValue == null || newValue === false) {
-            {
+            if (isXlinkNs) {
+                elm.removeAttributeNS(XLINK_NS, toLowerCase(memberName));
+            }
+            else {
                 elm.removeAttribute(memberName);
             }
         }
         else if ((!isProp || (flags & 4 /* isHost */) || isSvg) && !isComplex) {
             newValue = newValue === true ? '' : newValue.toString();
-            {
+            if (isXlinkNs) {
+                elm.setAttributeNS(XLINK_NS, toLowerCase(memberName), newValue);
+            }
+            else {
                 elm.setAttribute(memberName, newValue);
             }
         }
@@ -493,7 +512,12 @@ const createElm = (oldParentVNode, newParentVNode, childIndex, parentElm) => {
     }
     else {
         // create element
-        elm = newVNode.$elm$ = (doc.createElement(newVNode.$tag$));
+        elm = newVNode.$elm$ = ((isSvgMode || newVNode.$tag$ === 'svg')
+            ? doc.createElementNS(SVG_NS, newVNode.$tag$)
+            : doc.createElement(newVNode.$tag$));
+        {
+            isSvgMode = newVNode.$tag$ === 'svg' ? true : (newVNode.$tag$ === 'foreignObject' ? false : isSvgMode);
+        }
         // add css classes, attrs, props, listeners, etc.
         {
             updateElement(null, newVNode, isSvgMode);
@@ -508,6 +532,10 @@ const createElm = (oldParentVNode, newParentVNode, childIndex, parentElm) => {
                     elm.appendChild(childNode);
                 }
             }
+        }
+        if (newVNode.$tag$ === 'svg') {
+            // Only reset the SVG context when we're exiting SVG element
+            isSvgMode = false;
         }
     }
     return newVNode.$elm$;
@@ -641,6 +669,14 @@ const patch = (oldVNode, newVNode) => {
     const elm = newVNode.$elm$ = oldVNode.$elm$;
     const oldChildren = oldVNode.$children$;
     const newChildren = newVNode.$children$;
+    {
+        // test if we're rendering an svg element, or still rendering nodes inside of one
+        // only add this to the when the compiler sees we're using an svg somewhere
+        isSvgMode = elm &&
+            isDef(elm.parentNode) &&
+            elm.ownerSVGElement !== undefined;
+        isSvgMode = newVNode.$tag$ === 'svg' ? true : (newVNode.$tag$ === 'foreignObject' ? false : isSvgMode);
+    }
     if (!isDef(newVNode.$text$)) {
         // element node
         {
@@ -673,6 +709,9 @@ const patch = (oldVNode, newVNode) => {
         // update the text content for the text only vnode
         // and also only if the text is different than before
         elm.textContent = newVNode.$text$;
+    }
+    if (isSvgMode && newVNode.$tag$ === 'svg') {
+        isSvgMode = false;
     }
 };
 const callNodeRefs = (vNode, isDestroy) => {
