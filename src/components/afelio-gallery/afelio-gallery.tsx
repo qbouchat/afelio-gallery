@@ -1,4 +1,4 @@
-import { Component, Prop, h} from '@stencil/core';
+import { Component, Prop, h, Watch} from '@stencil/core';
 import { AfelioGalleryOptions } from '../../utils/interface/afelio-gallery-options.interface';
 @Component({
 	tag: 'afelio-gallery',
@@ -6,6 +6,8 @@ import { AfelioGalleryOptions } from '../../utils/interface/afelio-gallery-optio
 	shadow: false
 })
 export class MyComponent {
+
+	modal: HTMLModalComponentElement;
 
 	// IMAGES ARRAY
 	@Prop() images: string[] = [
@@ -31,13 +33,19 @@ export class MyComponent {
 		actions: []
 	}
 
+	@Watch('images')
+	changeImages(images: string[], oldImages: string[]) {
+		console.log(images, oldImages);
+		this.modal.imagesLink = this.images;
+	}
+
 
 	private showImage(indexImage: number) {
-		const el = document.createElement('modal-component');
-		el.imagesLink = this.images;
-		el.indexImageShowed = indexImage;
-		el.galleryOptions = this.galleryOptions;
-		document.body.appendChild(el);
+		this.modal = document.createElement('modal-component');
+		this.modal.imagesLink = this.images;
+		this.modal.indexImageShowed = indexImage;
+		this.modal.galleryOptions = this.galleryOptions;
+		document.body.appendChild(this.modal);
 	}
 
 	render() {

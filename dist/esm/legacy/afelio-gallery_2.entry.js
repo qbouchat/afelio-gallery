@@ -24,17 +24,30 @@ var MyComponent = /** @class */ (function () {
             actions: []
         };
     }
+    MyComponent.prototype.changeImages = function (images, oldImages) {
+        console.log(images, oldImages);
+        this.modal.imagesLink = this.images;
+    };
     MyComponent.prototype.showImage = function (indexImage) {
-        var el = document.createElement('modal-component');
-        el.imagesLink = this.images;
-        el.indexImageShowed = indexImage;
-        el.galleryOptions = this.galleryOptions;
-        document.body.appendChild(el);
+        this.modal = document.createElement('modal-component');
+        this.modal.imagesLink = this.images;
+        this.modal.indexImageShowed = indexImage;
+        this.modal.galleryOptions = this.galleryOptions;
+        document.body.appendChild(this.modal);
     };
     MyComponent.prototype.render = function () {
         var _this = this;
         return (h("div", null, h("ul", { class: "afelio__gallery__pictures" }, this.images.map(function (image, index) { return h("li", { class: "afelio__gallery__pictures__item" }, h("img", { src: image, onClick: function () { return _this.showImage(index); } })); }))));
     };
+    Object.defineProperty(MyComponent, "watchers", {
+        get: function () {
+            return {
+                "images": ["changeImages"]
+            };
+        },
+        enumerable: true,
+        configurable: true
+    });
     Object.defineProperty(MyComponent, "style", {
         get: function () { return ".afelio__gallery__pictures{display:-ms-flexbox;display:flex;list-style:none;padding:0;margin:0}.afelio__gallery__pictures .afelio__gallery__pictures__item{margin-right:10px}.afelio__gallery__pictures .afelio__gallery__pictures__item img{display:block;height:100px;width:auto;cursor:pointer}.afelio__gallery__pictures .afelio__gallery__pictures__item:last-child{margin-right:0}"; },
         enumerable: true,

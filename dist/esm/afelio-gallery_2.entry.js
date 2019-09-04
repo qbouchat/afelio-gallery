@@ -25,16 +25,23 @@ class MyComponent {
             actions: []
         };
     }
+    changeImages(images, oldImages) {
+        console.log(images, oldImages);
+        this.modal.imagesLink = this.images;
+    }
     showImage(indexImage) {
-        const el = document.createElement('modal-component');
-        el.imagesLink = this.images;
-        el.indexImageShowed = indexImage;
-        el.galleryOptions = this.galleryOptions;
-        document.body.appendChild(el);
+        this.modal = document.createElement('modal-component');
+        this.modal.imagesLink = this.images;
+        this.modal.indexImageShowed = indexImage;
+        this.modal.galleryOptions = this.galleryOptions;
+        document.body.appendChild(this.modal);
     }
     render() {
         return (h("div", null, h("ul", { class: "afelio__gallery__pictures" }, this.images.map((image, index) => h("li", { class: "afelio__gallery__pictures__item" }, h("img", { src: image, onClick: () => this.showImage(index) }))))));
     }
+    static get watchers() { return {
+        "images": ["changeImages"]
+    }; }
     static get style() { return ".afelio__gallery__pictures{display:-ms-flexbox;display:flex;list-style:none;padding:0;margin:0}.afelio__gallery__pictures .afelio__gallery__pictures__item{margin-right:10px}.afelio__gallery__pictures .afelio__gallery__pictures__item img{display:block;height:100px;width:auto;cursor:pointer}.afelio__gallery__pictures .afelio__gallery__pictures__item:last-child{margin-right:0}"; }
 }
 
