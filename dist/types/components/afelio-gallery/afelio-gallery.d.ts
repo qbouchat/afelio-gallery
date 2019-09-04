@@ -1,6 +1,8 @@
+import { EventEmitter } from '../../stencil.core';
 import { AfelioGalleryOptions } from '../../utils/interface/afelio-gallery-options.interface';
 export declare class MyComponent {
     modal: HTMLModalComponentElement;
+    deleteImage: EventEmitter;
     defaultGalleryOptions: {
         previousIconUrl: string;
         nextIconUrl: string;
@@ -15,7 +17,7 @@ export declare class MyComponent {
     };
     images: string[];
     galleryOptions: AfelioGalleryOptions;
-    changeImages(images: string[], oldImages: string[]): void;
+    changeImages(): void;
     private showImage;
     render(): any;
 }

@@ -13,12 +13,7 @@ export class ModalComponent {
 	@Element() modal: HTMLElement;
 	modalContent: HTMLElement
 
-	@Event({
-		eventName: 'deleteImage',
-		composed: true,
-		cancelable: true,
-		bubbles: true,
-	  }) deleteImage: EventEmitter;
+	@Event() deleteImage: EventEmitter;
 
 	@Prop() imagesLink: string[];
 	@Prop() indexImageShowed: number;
