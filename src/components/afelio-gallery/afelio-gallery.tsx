@@ -9,15 +9,7 @@ export class MyComponent {
 
 	modal: HTMLModalComponentElement;
 
-	// IMAGES ARRAY
-	@Prop() images: string[] = [
-		'https://mir-s3-cdn-cf.behance.net/project_modules/1400_opt_1/db530b53956937.59480e2e544f5.png',
-		'https://mir-s3-cdn-cf.behance.net/project_modules/1400_opt_1/06198253956937.59480e2e53bc9.png',
-		'https://mir-s3-cdn-cf.behance.net/project_modules/1400_opt_1/7a0cc153956937.59480e2e549d5.jpg'
-	];
-
-	// SETTING OPTIONS
-	@Prop() galleryOptions: AfelioGalleryOptions = {
+	defaultGalleryOptions = {
 		//  ICONS SOURCES PROPS
 		previousIconUrl: 'data:image/svg+xml;utf8,<svg viewBox="0 0 600 600" version="1.1" xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink"><g id="Page-1" stroke="none" stroke-width="1" fill="none" fill-rule="evenodd"><circle id="Oval" stroke="%235D5D5D" fill-opacity="0.5" fill="%23FFFFFF" transform="translate(300.000000, 300.000000) rotate(-180.000000) translate(-300.000000, -300.000000) " cx="300" cy="300" r="299"></circle><g id="next" transform="translate(270.500000, 299.500000) rotate(-180.000000) translate(-270.500000, -299.500000) translate(169.000000, 98.000000)" stroke="%235D5D5D" stroke-linecap="round" stroke-linejoin="round" stroke-width="41"><polyline id="arrow-next" transform="translate(101.416016, 201.767578) rotate(-180.000000) translate(-101.416016, -201.767578) " points="198.781251 0.984375 0.015626 199.75 202.816407 402.550781"></polyline></g></g></svg>',
 		nextIconUrl: 'data:image/svg+xml;utf8,<svg viewBox="0 0 600 600" version="1.1" xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink"><g id="Page-1" stroke="none" stroke-width="1" fill="none" fill-rule="evenodd"><circle id="Oval"  fill-opacity="0.5" fill="%23FFFFFF" cx="300" cy="300" r="299"></circle><g id="next" transform="translate(228.000000, 99.000000)" stroke="%235D5D5D" stroke-linecap="round" stroke-linejoin="round" stroke-width="41"><polyline id="arrow-next" transform="translate(101.416016, 201.767578) rotate(-180.000000) translate(-101.416016, -201.767578) " points="198.781251 0.984375 0.015626 199.75 202.816407 402.550781"></polyline></g></g></svg>',
@@ -33,6 +25,16 @@ export class MyComponent {
 		actions: []
 	}
 
+	// IMAGES ARRAY
+	@Prop() images: string[] = [
+		'https://mir-s3-cdn-cf.behance.net/project_modules/1400_opt_1/db530b53956937.59480e2e544f5.png',
+		'https://mir-s3-cdn-cf.behance.net/project_modules/1400_opt_1/06198253956937.59480e2e53bc9.png',
+		'https://mir-s3-cdn-cf.behance.net/project_modules/1400_opt_1/7a0cc153956937.59480e2e549d5.jpg'
+	];
+
+	// SETTING OPTIONS
+	@Prop() galleryOptions: AfelioGalleryOptions;
+
 	@Watch('images')
 	changeImages(images: string[], oldImages: string[]) {
 		console.log(images, oldImages);
@@ -41,6 +43,7 @@ export class MyComponent {
 
 
 	private showImage(indexImage: number) {
+		this.galleryOptions = {...this.defaultGalleryOptions, ...this.galleryOptions};
 		this.modal = document.createElement('modal-component');
 		this.modal.imagesLink = this.images;
 		this.modal.indexImageShowed = indexImage;
