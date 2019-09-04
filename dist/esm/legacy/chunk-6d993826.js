@@ -1,17 +1,63 @@
-'use strict';
-
-const NAMESPACE = 'gallery';
-
-const win = window;
-const doc = document;
-const plt = {
+var __extends = (this && this.__extends) || (function () {
+    var extendStatics = function (d, b) {
+        extendStatics = Object.setPrototypeOf ||
+            ({ __proto__: [] } instanceof Array && function (d, b) { d.__proto__ = b; }) ||
+            function (d, b) { for (var p in b) if (b.hasOwnProperty(p)) d[p] = b[p]; };
+        return extendStatics(d, b);
+    };
+    return function (d, b) {
+        extendStatics(d, b);
+        function __() { this.constructor = d; }
+        d.prototype = b === null ? Object.create(b) : (__.prototype = b.prototype, new __());
+    };
+})();
+var __awaiter = (this && this.__awaiter) || function (thisArg, _arguments, P, generator) {
+    return new (P || (P = Promise))(function (resolve, reject) {
+        function fulfilled(value) { try { step(generator.next(value)); } catch (e) { reject(e); } }
+        function rejected(value) { try { step(generator["throw"](value)); } catch (e) { reject(e); } }
+        function step(result) { result.done ? resolve(result.value) : new P(function (resolve) { resolve(result.value); }).then(fulfilled, rejected); }
+        step((generator = generator.apply(thisArg, _arguments || [])).next());
+    });
+};
+var __generator = (this && this.__generator) || function (thisArg, body) {
+    var _ = { label: 0, sent: function() { if (t[0] & 1) throw t[1]; return t[1]; }, trys: [], ops: [] }, f, y, t, g;
+    return g = { next: verb(0), "throw": verb(1), "return": verb(2) }, typeof Symbol === "function" && (g[Symbol.iterator] = function() { return this; }), g;
+    function verb(n) { return function (v) { return step([n, v]); }; }
+    function step(op) {
+        if (f) throw new TypeError("Generator is already executing.");
+        while (_) try {
+            if (f = 1, y && (t = op[0] & 2 ? y["return"] : op[0] ? y["throw"] || ((t = y["return"]) && t.call(y), 0) : y.next) && !(t = t.call(y, op[1])).done) return t;
+            if (y = 0, t) op = [op[0] & 2, t.value];
+            switch (op[0]) {
+                case 0: case 1: t = op; break;
+                case 4: _.label++; return { value: op[1], done: false };
+                case 5: _.label++; y = op[1]; op = [0]; continue;
+                case 7: op = _.ops.pop(); _.trys.pop(); continue;
+                default:
+                    if (!(t = _.trys, t = t.length > 0 && t[t.length - 1]) && (op[0] === 6 || op[0] === 2)) { _ = 0; continue; }
+                    if (op[0] === 3 && (!t || (op[1] > t[0] && op[1] < t[3]))) { _.label = op[1]; break; }
+                    if (op[0] === 6 && _.label < t[1]) { _.label = t[1]; t = op; break; }
+                    if (t && _.label < t[2]) { _.label = t[2]; _.ops.push(op); break; }
+                    if (t[2]) _.ops.pop();
+                    _.trys.pop(); continue;
+            }
+            op = body.call(thisArg, _);
+        } catch (e) { op = [6, e]; y = 0; } finally { f = t = 0; }
+        if (op[0] & 5) throw op[1]; return { value: op[0] ? op[1] : void 0, done: true };
+    }
+};
+var _this = this;
+var NAMESPACE = 'gallery';
+var win = window;
+var doc = document;
+var plt = {
     $flags$: 0,
     $resourcesUrl$: '',
-    raf: (h) => requestAnimationFrame(h),
-    ael: (el, eventName, listener, opts) => el.addEventListener(eventName, listener, opts),
-    rel: (el, eventName, listener, opts) => el.removeEventListener(eventName, listener, opts),
+    raf: function (h) { return requestAnimationFrame(h); },
+    ael: function (el, eventName, listener, opts) { return el.addEventListener(eventName, listener, opts); },
+    rel: function (el, eventName, listener, opts) { return el.removeEventListener(eventName, listener, opts); },
 };
-const supportsConstructibleStylesheets = (() => {
+var supportsConstructibleStylesheets = (function () {
     try {
         new CSSStyleSheet();
         return true;
@@ -19,53 +65,48 @@ const supportsConstructibleStylesheets = (() => {
     catch (e) { }
     return false;
 })();
-
-const hostRefs = new WeakMap();
-const getHostRef = (ref) => hostRefs.get(ref);
-const registerInstance = (lazyInstance, hostRef) => hostRefs.set(hostRef.$lazyInstance$ = lazyInstance, hostRef);
-const registerHost = (elm) => {
+var hostRefs = new WeakMap();
+var getHostRef = function (ref) { return hostRefs.get(ref); };
+var registerInstance = function (lazyInstance, hostRef) { return hostRefs.set(hostRef.$lazyInstance$ = lazyInstance, hostRef); };
+var registerHost = function (elm) {
     {
-        const hostRef = {
+        var hostRef_1 = {
             $flags$: 0,
             $hostElement$: elm,
             $instanceValues$: new Map()
         };
-        hostRef.$onReadyPromise$ = new Promise(r => hostRef.$onReadyResolve$ = r);
-        return hostRefs.set(elm, hostRef);
+        hostRef_1.$onReadyPromise$ = new Promise(function (r) { return hostRef_1.$onReadyResolve$ = r; });
+        return hostRefs.set(elm, hostRef_1);
     }
 };
-const isMemberInElement = (elm, memberName) => memberName in elm;
-
-const consoleError = (e) => console.error(e);
-
-const loadModule = (cmpMeta, hostRef, hmrVersionId) => {
+var isMemberInElement = function (elm, memberName) { return memberName in elm; };
+var consoleError = function (e) { return console.error(e); };
+var loadModule = function (cmpMeta, hostRef, hmrVersionId) {
     // loadModuleImport
-    const bundleId = cmpMeta.$lazyBundleIds$;
-    return Promise.resolve(require(
+    var bundleId = cmpMeta.$lazyBundleIds$;
+    return import(
     /* webpackInclude: /\.entry\.js$/ */
     /* webpackExclude: /\.system\.entry\.js$/ */
     /* webpackMode: "lazy" */
-    `./${bundleId}.entry.js${''}`)).then(importedModule => importedModule[cmpMeta.$tagName$.replace(/-/g, '_')], consoleError);
+    "./" + bundleId + ".entry.js" + '').then(function (importedModule) { return importedModule[cmpMeta.$tagName$.replace(/-/g, '_')]; }, consoleError);
 };
-
-const styles = new Map();
-const cssVarShim = win.__stencil_cssshim;
-
-let queueCongestion = 0;
-let queuePending = false;
-const queueDomReads = [];
-const queueDomWrites = [];
-const queueDomWritesLow = [];
-const queueTask = (queue) => (cb) => {
+var styles = new Map();
+var cssVarShim = win.__stencil_cssshim;
+var queueCongestion = 0;
+var queuePending = false;
+var queueDomReads = [];
+var queueDomWrites = [];
+var queueDomWritesLow = [];
+var queueTask = function (queue) { return function (cb) {
     // queue dom reads
     queue.push(cb);
     if (!queuePending) {
         queuePending = true;
         plt.raf(flush);
     }
-};
-const consume = (queue) => {
-    for (let i = 0; i < queue.length; i++) {
+}; };
+var consume = function (queue) {
+    for (var i = 0; i < queue.length; i++) {
         try {
             queue[i](performance.now());
         }
@@ -75,9 +116,9 @@ const consume = (queue) => {
     }
     queue.length = 0;
 };
-const consumeTimeout = (queue, timeout) => {
-    let i = 0;
-    let ts = 0;
+var consumeTimeout = function (queue, timeout) {
+    var i = 0;
+    var ts = 0;
     while (i < queue.length && (ts = performance.now()) < timeout) {
         try {
             queue[i++](ts);
@@ -93,20 +134,20 @@ const consumeTimeout = (queue, timeout) => {
         queue.splice(0, i);
     }
 };
-const flush = () => {
+var flush = function () {
     queueCongestion++;
     // always force a bunch of medium callbacks to run, but still have
     // a throttle on how many can run in a certain time
     // DOM READS!!!
     consume(queueDomReads);
-    const timeout = (plt.$flags$ & 6 /* queueMask */) === 2 /* appLoaded */
+    var timeout = (plt.$flags$ & 6 /* queueMask */) === 2 /* appLoaded */
         ? performance.now() + (7 * Math.ceil(queueCongestion * (1.0 / 22.0)))
         : Infinity;
     // DOM WRITES!!!
     consumeTimeout(queueDomWrites, timeout);
     consumeTimeout(queueDomWritesLow, timeout);
     if (queueDomWrites.length > 0) {
-        queueDomWritesLow.push(...queueDomWrites);
+        queueDomWritesLow.push.apply(queueDomWritesLow, queueDomWrites);
         queueDomWrites.length = 0;
     }
     if (queuePending = ((queueDomReads.length + queueDomWrites.length + queueDomWritesLow.length) > 0)) {
@@ -118,8 +159,7 @@ const flush = () => {
         queueCongestion = 0;
     }
 };
-const writeTask = /*@__PURE__*/ queueTask(queueDomWrites);
-
+var writeTask = /*@__PURE__*/ queueTask(queueDomWrites);
 /**
  * Default style mode id
  */
@@ -127,79 +167,81 @@ const writeTask = /*@__PURE__*/ queueTask(queueDomWrites);
  * Reusable empty obj/array
  * Don't add values to these!!
  */
-const EMPTY_OBJ = {};
+var EMPTY_OBJ = {};
 /**
  * Namespaces
  */
-const SVG_NS = 'http://www.w3.org/2000/svg';
-
-const isDef = (v) => v != null;
-const toLowerCase = (str) => str.toLowerCase();
-const isComplexType = (o) => ['object', 'function'].includes(typeof o);
-
+var SVG_NS = 'http://www.w3.org/2000/svg';
+var isDef = function (v) { return v != null; };
+var toLowerCase = function (str) { return str.toLowerCase(); };
+var isComplexType = function (o) { return ['object', 'function'].includes(typeof o); };
 function getDynamicImportFunction(namespace) {
-    return `__sc_import_${namespace.replace(/\s|-/g, '_')}`;
+    return "__sc_import_" + namespace.replace(/\s|-/g, '_');
 }
-
-const patchEsm = () => {
+var patchEsm = function () {
     // @ts-ignore
     if (!(win.CSS && win.CSS.supports && win.CSS.supports('color', 'var(--c)'))) {
         // @ts-ignore
-        return Promise.resolve(require('./css-shim-f7ddb189-673dd43d.js'));
+        return import('./css-shim-f7ddb189-f7ddb189.js');
     }
     return Promise.resolve();
 };
-const patchBrowser = async () => {
-    // @ts-ignore
-    const importMeta = (typeof document === 'undefined' ? new (require('u' + 'rl').URL)('file:' + __filename).href : (document.currentScript && document.currentScript.src || new URL('chunk-f7efe363.js', document.baseURI).href));
-    if (importMeta !== '') {
-        return Promise.resolve(new URL('.', importMeta).href);
-    }
-    else {
-        const scriptElm = Array.from(doc.querySelectorAll('script')).find(s => (s.src.includes(`/${NAMESPACE}.esm.js`) ||
-            s.getAttribute('data-namespace') === NAMESPACE));
-        const resourcesUrl = new URL('.', new URL(scriptElm.getAttribute('data-resources-url') || scriptElm.src, win.location.href));
-        patchDynamicImport(resourcesUrl.href);
-        if (!window.customElements) {
-            // @ts-ignore
-            await Promise.resolve(require('./dom-a0c82e31-d4621515.js'));
+var patchBrowser = function () { return __awaiter(_this, void 0, void 0, function () {
+    var importMeta, scriptElm, resourcesUrl;
+    return __generator(this, function (_a) {
+        switch (_a.label) {
+            case 0:
+                importMeta = "";
+                if (!(importMeta !== '')) return [3 /*break*/, 1];
+                return [2 /*return*/, Promise.resolve(new URL('.', importMeta).href)];
+            case 1:
+                scriptElm = Array.from(doc.querySelectorAll('script')).find(function (s) { return (s.src.includes("/" + NAMESPACE + ".esm.js") ||
+                    s.getAttribute('data-namespace') === NAMESPACE); });
+                resourcesUrl = new URL('.', new URL(scriptElm.getAttribute('data-resources-url') || scriptElm.src, win.location.href));
+                patchDynamicImport(resourcesUrl.href);
+                if (!!window.customElements) return [3 /*break*/, 3];
+                // @ts-ignore
+                return [4 /*yield*/, import('./dom-a0c82e31-a0c82e31.js')];
+            case 2:
+                // @ts-ignore
+                _a.sent();
+                _a.label = 3;
+            case 3: return [2 /*return*/, resourcesUrl.href];
         }
-        return resourcesUrl.href;
-    }
-};
-const patchDynamicImport = (base) => {
-    const importFunctionName = getDynamicImportFunction(NAMESPACE);
+    });
+}); };
+var patchDynamicImport = function (base) {
+    var importFunctionName = getDynamicImportFunction(NAMESPACE);
     try {
         win[importFunctionName] = new Function('w', 'return import(w);');
     }
     catch (e) {
-        const moduleMap = new Map();
-        win[importFunctionName] = (src) => {
-            const url = new URL(src, base).href;
-            let mod = moduleMap.get(url);
+        var moduleMap_1 = new Map();
+        win[importFunctionName] = function (src) {
+            var url = new URL(src, base).href;
+            var mod = moduleMap_1.get(url);
             if (!mod) {
-                const script = doc.createElement('script');
-                script.type = 'module';
-                script.src = URL.createObjectURL(new Blob([`import * as m from '${url}'; window.${importFunctionName}.m = m;`], { type: 'application/javascript' }));
-                mod = new Promise(resolve => {
-                    script.onload = () => {
+                var script_1 = doc.createElement('script');
+                script_1.type = 'module';
+                script_1.src = URL.createObjectURL(new Blob(["import * as m from '" + url + "'; window." + importFunctionName + ".m = m;"], { type: 'application/javascript' }));
+                mod = new Promise(function (resolve) {
+                    script_1.onload = function () {
                         resolve(win[importFunctionName].m);
-                        script.remove();
+                        script_1.remove();
                     };
                 });
-                moduleMap.set(url, mod);
-                doc.head.appendChild(script);
+                moduleMap_1.set(url, mod);
+                doc.head.appendChild(script_1);
             }
             return mod;
         };
     }
 };
-const HYDRATED_CLASS = 'hydrated';
-const XLINK_NS = 'http://www.w3.org/1999/xlink';
-
-const rootAppliedStyles = new WeakMap();
-const registerStyle = (scopeId, cssText, allowCS) => {
-    let style = styles.get(scopeId);
+var HYDRATED_CLASS = 'hydrated';
+var XLINK_NS = 'http://www.w3.org/1999/xlink';
+var rootAppliedStyles = new WeakMap();
+var registerStyle = function (scopeId, cssText, allowCS) {
+    var style = styles.get(scopeId);
     if (supportsConstructibleStylesheets && allowCS) {
         style = (style || new CSSStyleSheet());
         style.replace(cssText);
@@ -209,17 +251,17 @@ const registerStyle = (scopeId, cssText, allowCS) => {
     }
     styles.set(scopeId, style);
 };
-const addStyle = (styleContainerNode, tagName, mode, hostElm) => {
-    let scopeId = getScopeId(tagName);
-    let style = styles.get(scopeId);
+var addStyle = function (styleContainerNode, tagName, mode, hostElm) {
+    var scopeId = getScopeId(tagName);
+    var style = styles.get(scopeId);
     // if an element is NOT connected then getRootNode() will return the wrong root node
     // so the fallback is to always use the document for the root node in those cases
     styleContainerNode = (styleContainerNode.nodeType === 11 /* DocumentFragment */ ? styleContainerNode : doc);
     if (style) {
         if (typeof style === 'string') {
             styleContainerNode = styleContainerNode.head || styleContainerNode;
-            let appliedStyles = rootAppliedStyles.get(styleContainerNode);
-            let styleElm;
+            var appliedStyles = rootAppliedStyles.get(styleContainerNode);
+            var styleElm = void 0;
             if (!appliedStyles) {
                 rootAppliedStyles.set(styleContainerNode, appliedStyles = new Set());
             }
@@ -227,7 +269,7 @@ const addStyle = (styleContainerNode, tagName, mode, hostElm) => {
                 {
                     if (cssVarShim) {
                         styleElm = cssVarShim.createHostStyle(hostElm, scopeId, style);
-                        const newScopeId = styleElm['s-sc'];
+                        var newScopeId = styleElm['s-sc'];
                         if (newScopeId) {
                             scopeId = newScopeId;
                             // we don't want to add this styleID to the appliedStyles Set
@@ -248,19 +290,17 @@ const addStyle = (styleContainerNode, tagName, mode, hostElm) => {
             }
         }
         else if (!styleContainerNode.adoptedStyleSheets.includes(style)) {
-            styleContainerNode.adoptedStyleSheets = [
-                ...styleContainerNode.adoptedStyleSheets,
+            styleContainerNode.adoptedStyleSheets = styleContainerNode.adoptedStyleSheets.concat([
                 style
-            ];
+            ]);
         }
     }
     return scopeId;
 };
-const attachStyles = (elm, cmpMeta, mode) => {
-    const styleId = addStyle(elm.getRootNode(), cmpMeta.$tagName$, mode, elm);
+var attachStyles = function (elm, cmpMeta, mode) {
+    var styleId = addStyle(elm.getRootNode(), cmpMeta.$tagName$, mode, elm);
 };
-const getScopeId = (tagName, mode) => 'sc-' + (tagName);
-
+var getScopeId = function (tagName, mode) { return 'sc-' + (tagName); };
 /**
  * Production h() function based on Preact by
  * Jason Miller (@developit)
@@ -272,14 +312,18 @@ const getScopeId = (tagName, mode) => 'sc-' + (tagName);
 // const stack: any[] = [];
 // export function h(nodeName: string | d.FunctionalComponent, vnodeData: d.PropsType, child?: d.ChildType): d.VNode;
 // export function h(nodeName: string | d.FunctionalComponent, vnodeData: d.PropsType, ...children: d.ChildType[]): d.VNode;
-const h = (nodeName, vnodeData, ...children) => {
-    let child = null;
-    let simple = false;
-    let lastSimple = false;
-    let key;
-    let vNodeChildren = [];
-    const walk = (c) => {
-        for (let i = 0; i < c.length; i++) {
+var h = function (nodeName, vnodeData) {
+    var children = [];
+    for (var _i = 2; _i < arguments.length; _i++) {
+        children[_i - 2] = arguments[_i];
+    }
+    var child = null;
+    var simple = false;
+    var lastSimple = false;
+    var key;
+    var vNodeChildren = [];
+    var walk = function (c) {
+        for (var i = 0; i < c.length; i++) {
             child = c[i];
             if (Array.isArray(child)) {
                 walk(child);
@@ -307,12 +351,12 @@ const h = (nodeName, vnodeData, ...children) => {
             key = vnodeData.key || undefined;
         }
         {
-            const classData = vnodeData.className || vnodeData.class;
-            if (classData) {
-                vnodeData.class = typeof classData !== 'object'
-                    ? classData
-                    : Object.keys(classData)
-                        .filter(k => classData[k])
+            var classData_1 = vnodeData.className || vnodeData.class;
+            if (classData_1) {
+                vnodeData.class = typeof classData_1 !== 'object'
+                    ? classData_1
+                    : Object.keys(classData_1)
+                        .filter(function (k) { return classData_1[k]; })
                         .join(' ');
             }
         }
@@ -321,7 +365,7 @@ const h = (nodeName, vnodeData, ...children) => {
         // nodeName is a functional component
         return nodeName(vnodeData, vNodeChildren, vdomFnUtils);
     }
-    const vnode = {
+    var vnode = {
         $flags$: 0,
         $tag$: nodeName,
         $children$: vNodeChildren.length > 0 ? vNodeChildren : null,
@@ -333,12 +377,12 @@ const h = (nodeName, vnodeData, ...children) => {
     }
     return vnode;
 };
-const Host = {};
-const vdomFnUtils = {
-    'forEach': (children, cb) => children.map(convertToPublic).forEach(cb),
-    'map': (children, cb) => children.map(convertToPublic).map(cb).map(convertToPrivate)
+var Host = {};
+var vdomFnUtils = {
+    'forEach': function (children, cb) { return children.map(convertToPublic).forEach(cb); },
+    'map': function (children, cb) { return children.map(convertToPublic).map(cb).map(convertToPrivate); }
 };
-const convertToPublic = (node) => {
+var convertToPublic = function (node) {
     return {
         vattrs: node.$attrs$,
         vchildren: node.$children$,
@@ -348,7 +392,7 @@ const convertToPublic = (node) => {
         vtext: node.$text$
     };
 };
-const convertToPrivate = (node) => {
+var convertToPrivate = function (node) {
     return {
         $flags$: 0,
         $attrs$: node.vattrs,
@@ -359,7 +403,6 @@ const convertToPrivate = (node) => {
         $text$: node.vtext
     };
 };
-
 /**
  * Production setAccessor() function based on Preact by
  * Jason Miller (@developit)
@@ -368,22 +411,22 @@ const convertToPrivate = (node) => {
  *
  * Modified for Stencil's compiler and vdom
  */
-const setAccessor = (elm, memberName, oldValue, newValue, isSvg, flags) => {
+var setAccessor = function (elm, memberName, oldValue, newValue, isSvg, flags) {
     if (oldValue === newValue) {
         return;
     }
     if (memberName === 'class' && !isSvg) {
         // Class
         {
-            const oldList = parseClassList(oldValue);
-            const baseList = parseClassList(elm.className).filter(item => !oldList.includes(item));
-            elm.className = baseList.concat(parseClassList(newValue).filter(item => !baseList.includes(item))).join(' ');
+            var oldList_1 = parseClassList(oldValue);
+            var baseList_1 = parseClassList(elm.className).filter(function (item) { return !oldList_1.includes(item); });
+            elm.className = baseList_1.concat(parseClassList(newValue).filter(function (item) { return !baseList_1.includes(item); })).join(' ');
         }
     }
     else if (memberName === 'style') {
         // update style attribute, css properties and values
         {
-            for (const prop in oldValue) {
+            for (var prop in oldValue) {
                 if (!newValue || newValue[prop] == null) {
                     if (prop.includes('-')) {
                         elm.style.removeProperty(prop);
@@ -394,7 +437,7 @@ const setAccessor = (elm, memberName, oldValue, newValue, isSvg, flags) => {
                 }
             }
         }
-        for (const prop in newValue) {
+        for (var prop in newValue) {
             if (!oldValue || newValue[prop] !== oldValue[prop]) {
                 if (prop.includes('-')) {
                     elm.style.setProperty(prop, newValue[prop]);
@@ -405,7 +448,8 @@ const setAccessor = (elm, memberName, oldValue, newValue, isSvg, flags) => {
             }
         }
     }
-    else if (memberName === 'key') ;
+    else if (memberName === 'key')
+        ;
     else if (memberName === 'ref') {
         // minifier will clean this up
         if (newValue) {
@@ -441,8 +485,8 @@ const setAccessor = (elm, memberName, oldValue, newValue, isSvg, flags) => {
     }
     else {
         // Set property if it exists and it's not a SVG
-        const isProp = isMemberInElement(elm, memberName);
-        const isComplex = isComplexType(newValue);
+        var isProp = isMemberInElement(elm, memberName);
+        var isComplex = isComplexType(newValue);
         if ((isProp || (isComplex && newValue !== null)) && !isSvg) {
             try {
                 elm[memberName] = newValue == null && elm.tagName.indexOf('-') === -1 ? '' : newValue;
@@ -456,7 +500,7 @@ const setAccessor = (elm, memberName, oldValue, newValue, isSvg, flags) => {
          * - if it's a SVG, since properties might not work in <svg>
          * - if the newValue is null/undefined or 'false'.
          */
-        const isXlinkNs = isSvg && (memberName !== (memberName = memberName.replace(/^xlink\:?/, ''))) ? true : false;
+        var isXlinkNs = isSvg && (memberName !== (memberName = memberName.replace(/^xlink\:?/, ''))) ? true : false;
         if (newValue == null || newValue === false) {
             if (isXlinkNs) {
                 elm.removeAttributeNS(XLINK_NS, toLowerCase(memberName));
@@ -476,15 +520,14 @@ const setAccessor = (elm, memberName, oldValue, newValue, isSvg, flags) => {
         }
     }
 };
-const parseClassList = (value) => (!value) ? [] : value.split(' ');
-
-const updateElement = (oldVnode, newVnode, isSvgMode, memberName) => {
+var parseClassList = function (value) { return (!value) ? [] : value.split(' '); };
+var updateElement = function (oldVnode, newVnode, isSvgMode, memberName) {
     // if the element passed in is a shadow root, which is a document fragment
     // then we want to be adding attrs/props to the shadow root's "host" element
     // if it's not a shadow root, then we add attrs/props to the same element
-    const elm = (newVnode.$elm$.nodeType === 11 /* DocumentFragment */ && newVnode.$elm$.host) ? newVnode.$elm$.host : newVnode.$elm$;
-    const oldVnodeAttrs = (oldVnode && oldVnode.$attrs$) || EMPTY_OBJ;
-    const newVnodeAttrs = newVnode.$attrs$ || EMPTY_OBJ;
+    var elm = (newVnode.$elm$.nodeType === 11 /* DocumentFragment */ && newVnode.$elm$.host) ? newVnode.$elm$.host : newVnode.$elm$;
+    var oldVnodeAttrs = (oldVnode && oldVnode.$attrs$) || EMPTY_OBJ;
+    var newVnodeAttrs = newVnode.$attrs$ || EMPTY_OBJ;
     {
         // remove attributes no longer present on the vnode by setting them to undefined
         for (memberName in oldVnodeAttrs) {
@@ -498,14 +541,14 @@ const updateElement = (oldVnode, newVnode, isSvgMode, memberName) => {
         setAccessor(elm, memberName, oldVnodeAttrs[memberName], newVnodeAttrs[memberName], isSvgMode, newVnode.$flags$);
     }
 };
-let hostTagName;
-let isSvgMode = false;
-const createElm = (oldParentVNode, newParentVNode, childIndex, parentElm) => {
+var hostTagName;
+var isSvgMode = false;
+var createElm = function (oldParentVNode, newParentVNode, childIndex, parentElm) {
     // tslint:disable-next-line: prefer-const
-    let newVNode = newParentVNode.$children$[childIndex];
-    let i = 0;
-    let elm;
-    let childNode;
+    var newVNode = newParentVNode.$children$[childIndex];
+    var i = 0;
+    var elm;
+    var childNode;
     if (isDef(newVNode.$text$)) {
         // create text node
         newVNode.$elm$ = doc.createTextNode(newVNode.$text$);
@@ -540,9 +583,9 @@ const createElm = (oldParentVNode, newParentVNode, childIndex, parentElm) => {
     }
     return newVNode.$elm$;
 };
-const addVnodes = (parentElm, before, parentVNode, vnodes, startIdx, endIdx) => {
-    let containerElm = (parentElm);
-    let childNode;
+var addVnodes = function (parentElm, before, parentVNode, vnodes, startIdx, endIdx) {
+    var containerElm = (parentElm);
+    var childNode;
     for (; startIdx <= endIdx; ++startIdx) {
         if (vnodes[startIdx]) {
             childNode = createElm(null, parentVNode, startIdx);
@@ -553,7 +596,7 @@ const addVnodes = (parentElm, before, parentVNode, vnodes, startIdx, endIdx) => 
         }
     }
 };
-const removeVnodes = (vnodes, startIdx, endIdx, elm) => {
+var removeVnodes = function (vnodes, startIdx, endIdx, elm) {
     for (; startIdx <= endIdx; ++startIdx) {
         if (isDef(vnodes[startIdx])) {
             elm = vnodes[startIdx].$elm$;
@@ -563,19 +606,19 @@ const removeVnodes = (vnodes, startIdx, endIdx, elm) => {
         }
     }
 };
-const updateChildren = (parentElm, oldCh, newVNode, newCh) => {
-    let oldStartIdx = 0;
-    let newStartIdx = 0;
-    let idxInOld = 0;
-    let i = 0;
-    let oldEndIdx = oldCh.length - 1;
-    let oldStartVnode = oldCh[0];
-    let oldEndVnode = oldCh[oldEndIdx];
-    let newEndIdx = newCh.length - 1;
-    let newStartVnode = newCh[0];
-    let newEndVnode = newCh[newEndIdx];
-    let node;
-    let elmToMove;
+var updateChildren = function (parentElm, oldCh, newVNode, newCh) {
+    var oldStartIdx = 0;
+    var newStartIdx = 0;
+    var idxInOld = 0;
+    var i = 0;
+    var oldEndIdx = oldCh.length - 1;
+    var oldStartVnode = oldCh[0];
+    var oldEndVnode = oldCh[oldEndIdx];
+    var newEndIdx = newCh.length - 1;
+    var newStartVnode = newCh[0];
+    var newEndVnode = newCh[newEndIdx];
+    var node;
+    var elmToMove;
     while (oldStartIdx <= oldEndIdx && newStartIdx <= newEndIdx) {
         if (oldStartVnode == null) {
             // Vnode might have been moved left
@@ -654,7 +697,7 @@ const updateChildren = (parentElm, oldCh, newVNode, newCh) => {
         removeVnodes(oldCh, oldStartIdx, oldEndIdx);
     }
 };
-const isSameVnode = (vnode1, vnode2) => {
+var isSameVnode = function (vnode1, vnode2) {
     // compare if two vnode to see if they're "technically" the same
     // need to have the same element tag, and same key to be the same
     if (vnode1.$tag$ === vnode2.$tag$) {
@@ -665,10 +708,10 @@ const isSameVnode = (vnode1, vnode2) => {
     }
     return false;
 };
-const patch = (oldVNode, newVNode) => {
-    const elm = newVNode.$elm$ = oldVNode.$elm$;
-    const oldChildren = oldVNode.$children$;
-    const newChildren = newVNode.$children$;
+var patch = function (oldVNode, newVNode) {
+    var elm = newVNode.$elm$ = oldVNode.$elm$;
+    var oldChildren = oldVNode.$children$;
+    var newChildren = newVNode.$children$;
     {
         // test if we're rendering an svg element, or still rendering nodes inside of one
         // only add this to the when the compiler sees we're using an svg somewhere
@@ -714,19 +757,19 @@ const patch = (oldVNode, newVNode) => {
         isSvgMode = false;
     }
 };
-const callNodeRefs = (vNode, isDestroy) => {
+var callNodeRefs = function (vNode, isDestroy) {
     if (vNode) {
         vNode.$attrs$ && vNode.$attrs$.ref && vNode.$attrs$.ref(isDestroy ? null : vNode.$elm$);
-        vNode.$children$ && vNode.$children$.forEach(vChild => {
+        vNode.$children$ && vNode.$children$.forEach(function (vChild) {
             callNodeRefs(vChild, isDestroy);
         });
     }
 };
-const isHost = (node) => {
+var isHost = function (node) {
     return node && node.$tag$ === Host;
 };
-const renderVdom = (hostElm, hostRef, cmpMeta, renderFnResults) => {
-    const oldVNode = hostRef.$vnode$ || { $flags$: 0 };
+var renderVdom = function (hostElm, hostRef, cmpMeta, renderFnResults) {
+    var oldVNode = hostRef.$vnode$ || { $flags$: 0 };
     hostTagName = toLowerCase(hostElm.tagName);
     if (isHost(renderFnResults)) {
         renderFnResults.$tag$ = null;
@@ -740,35 +783,53 @@ const renderVdom = (hostElm, hostRef, cmpMeta, renderFnResults) => {
     // synchronous patch
     patch(oldVNode, renderFnResults);
 };
-
-const safeCall = async (instance, method) => {
-    if (instance && instance[method]) {
-        try {
-            await instance[method]();
+var safeCall = function (instance, method) { return __awaiter(_this, void 0, void 0, function () {
+    var e_1;
+    return __generator(this, function (_a) {
+        switch (_a.label) {
+            case 0:
+                if (!(instance && instance[method])) return [3 /*break*/, 4];
+                _a.label = 1;
+            case 1:
+                _a.trys.push([1, 3, , 4]);
+                return [4 /*yield*/, instance[method]()];
+            case 2:
+                _a.sent();
+                return [3 /*break*/, 4];
+            case 3:
+                e_1 = _a.sent();
+                consoleError(e_1);
+                return [3 /*break*/, 4];
+            case 4: return [2 /*return*/];
         }
-        catch (e) {
-            consoleError(e);
+    });
+}); };
+var scheduleUpdate = function (elm, hostRef, cmpMeta, isInitialLoad) { return __awaiter(_this, void 0, void 0, function () {
+    var instance;
+    return __generator(this, function (_a) {
+        switch (_a.label) {
+            case 0:
+                {
+                    hostRef.$flags$ |= 16 /* isQueuedForUpdate */;
+                }
+                instance = hostRef.$lazyInstance$;
+                if (!isInitialLoad) return [3 /*break*/, 2];
+                return [4 /*yield*/, safeCall(instance, 'componentWillLoad')];
+            case 1:
+                _a.sent();
+                _a.label = 2;
+            case 2:
+                // there is no ancestorc omponent or the ancestor component
+                // has already fired off its lifecycle update then
+                // fire off the initial update
+                {
+                    writeTask(function () { return updateComponent(elm, hostRef, cmpMeta, instance, isInitialLoad); });
+                }
+                return [2 /*return*/];
         }
-    }
-};
-const scheduleUpdate = async (elm, hostRef, cmpMeta, isInitialLoad) => {
-    {
-        hostRef.$flags$ |= 16 /* isQueuedForUpdate */;
-    }
-    const instance = hostRef.$lazyInstance$;
-    if (isInitialLoad) {
-        {
-            await safeCall(instance, 'componentWillLoad');
-        }
-    }
-    // there is no ancestorc omponent or the ancestor component
-    // has already fired off its lifecycle update then
-    // fire off the initial update
-    {
-        writeTask(() => updateComponent(elm, hostRef, cmpMeta, instance, isInitialLoad));
-    }
-};
-const updateComponent = (elm, hostRef, cmpMeta, instance, isInitialLoad) => {
+    });
+}); };
+var updateComponent = function (elm, hostRef, cmpMeta, instance, isInitialLoad) {
     // updateComponent
     {
         hostRef.$flags$ &= ~16 /* isQueuedForUpdate */;
@@ -812,15 +873,15 @@ const updateComponent = (elm, hostRef, cmpMeta, instance, isInitialLoad) => {
         // ok, so turns out there are some child host elements
         // waiting on this parent element to load
         // let's fire off all update callbacks waiting
-        elm['s-rc'].forEach(cb => cb());
+        elm['s-rc'].forEach(function (cb) { return cb(); });
         elm['s-rc'].length = 0;
     }
     postUpdateComponent(elm, hostRef);
 };
-const postUpdateComponent = (elm, hostRef, ancestorsActivelyLoadingChildren) => {
+var postUpdateComponent = function (elm, hostRef, ancestorsActivelyLoadingChildren) {
     if (!elm['s-al']) {
-        const instance = hostRef.$lazyInstance$;
-        const ancestorComponent = hostRef.$ancestorComponent$;
+        var instance = hostRef.$lazyInstance$;
+        var ancestorComponent = hostRef.$ancestorComponent$;
         if (!(hostRef.$flags$ & 512 /* hasLoadedComponent */)) {
             hostRef.$flags$ |= 512 /* hasLoadedComponent */;
             {
@@ -836,7 +897,7 @@ const postUpdateComponent = (elm, hostRef, ancestorsActivelyLoadingChildren) => 
                 // we have finish the first big initial render
                 doc.documentElement.classList.add(HYDRATED_CLASS);
                 {
-                    setTimeout(() => plt.$flags$ |= 2 /* appLoaded */, 999);
+                    setTimeout(function () { return plt.$flags$ |= 2; } /* appLoaded */, 999);
                 }
             }
         }
@@ -865,34 +926,22 @@ const postUpdateComponent = (elm, hostRef, ancestorsActivelyLoadingChildren) => 
         // (⌐■_■)
     }
 };
-
-const disconnectedCallback = (elm) => {
+var disconnectedCallback = function (elm) {
     if ((plt.$flags$ & 1 /* isTmpDisconnected */) === 0) {
-        const hostRef = getHostRef(elm);
+        var hostRef = getHostRef(elm);
         // clear CSS var-shim tracking
         if (cssVarShim) {
             cssVarShim.removeHost(elm);
         }
-        const instance = hostRef.$lazyInstance$;
+        var instance = hostRef.$lazyInstance$;
     }
 };
-
-const parsePropertyValue = (propValue, propType) => {
+var parsePropertyValue = function (propValue, propType) {
     // ensure this value is of the correct prop type
     if (propValue != null && !isComplexType(propValue)) {
-        if (propType & 4 /* Boolean */) {
-            // per the HTML spec, any string value means it is a boolean true value
-            // but we'll cheat here and say that the string "false" is the boolean false
-            return (propValue === 'false' ? false : propValue === '' || !!propValue);
-        }
         if (propType & 2 /* Number */) {
             // force it to be a number
             return parseFloat(propValue);
-        }
-        if (propType & 1 /* String */) {
-            // could have been passed as a number or boolean
-            // but we still want it as a string
-            return String(propValue);
         }
         // redundant return here for better minification
         return propValue;
@@ -901,14 +950,13 @@ const parsePropertyValue = (propValue, propType) => {
     // so no need to change to a different type
     return propValue;
 };
-
-const getValue = (ref, propName) => getHostRef(ref).$instanceValues$.get(propName);
-const setValue = (ref, propName, newVal, cmpMeta) => {
+var getValue = function (ref, propName) { return getHostRef(ref).$instanceValues$.get(propName); };
+var setValue = function (ref, propName, newVal, cmpMeta) {
     // check our new property value against our internal value
-    const hostRef = getHostRef(ref);
-    const elm = hostRef.$hostElement$;
-    const oldVal = hostRef.$instanceValues$.get(propName);
-    const flags = hostRef.$flags$;
+    var hostRef = getHostRef(ref);
+    var elm = hostRef.$hostElement$;
+    var oldVal = hostRef.$instanceValues$.get(propName);
+    var flags = hostRef.$flags$;
     newVal = parsePropertyValue(newVal, cmpMeta.$members$[propName][0]);
     if (newVal !== oldVal && (!(flags & 8 /* isConstructingInstance */) || oldVal === undefined)) {
         // gadzooks! the property's value has changed!!
@@ -918,10 +966,10 @@ const setValue = (ref, propName, newVal, cmpMeta) => {
             // get an array of method names of watch functions to call
             if (cmpMeta.$watchers$ &&
                 (flags & (1 /* hasConnected */ | 8 /* isConstructingInstance */)) === 1 /* hasConnected */) {
-                const watchMethods = cmpMeta.$watchers$[propName];
+                var watchMethods = cmpMeta.$watchers$[propName];
                 if (watchMethods) {
                     // this instance is watching for when this property changed
-                    watchMethods.forEach(watchMethodName => {
+                    watchMethods.forEach(function (watchMethodName) {
                         try {
                             // fire off each of the watch methods that are watching this property
                             (hostRef.$lazyInstance$)[watchMethodName].call((hostRef.$lazyInstance$), newVal, oldVal, propName);
@@ -942,26 +990,26 @@ const setValue = (ref, propName, newVal, cmpMeta) => {
         }
     }
 };
-
-const proxyComponent = (Cstr, cmpMeta, flags) => {
+var proxyComponent = function (Cstr, cmpMeta, flags) {
     if (cmpMeta.$members$) {
         if (Cstr.watchers) {
             cmpMeta.$watchers$ = Cstr.watchers;
         }
         // It's better to have a const than two Object.entries()
-        const members = Object.entries(cmpMeta.$members$);
-        const prototype = Cstr.prototype;
-        members.forEach(([memberName, [memberFlags]]) => {
+        var members = Object.entries(cmpMeta.$members$);
+        var prototype_1 = Cstr.prototype;
+        members.forEach(function (_a) {
+            var memberName = _a[0], memberFlags = _a[1][0];
             if ((memberFlags & 31 /* Prop */) ||
                 ((flags & 2 /* proxyState */) &&
                     (memberFlags & 32 /* State */))) {
                 // proxyComponent - prop
-                Object.defineProperty(prototype, memberName, {
-                    get() {
+                Object.defineProperty(prototype_1, memberName, {
+                    get: function () {
                         // proxyComponent, get value
                         return getValue(this, memberName);
                     },
-                    set(newValue) {
+                    set: function (newValue) {
                         // proxyComponent, set value
                         setValue(this, memberName, newValue, cmpMeta);
                     },
@@ -971,9 +1019,9 @@ const proxyComponent = (Cstr, cmpMeta, flags) => {
             }
         });
         if (flags & 1) {
-            const attrNameToPropName = new Map();
-            prototype.attributeChangedCallback = function (attrName, _oldValue, newValue) {
-                const propName = attrNameToPropName.get(attrName);
+            var attrNameToPropName_1 = new Map();
+            prototype_1.attributeChangedCallback = function (attrName, _oldValue, newValue) {
+                var propName = attrNameToPropName_1.get(attrName);
                 this[propName] = newValue === null && typeof this[propName] === 'boolean'
                     ? false
                     : newValue;
@@ -981,96 +1029,104 @@ const proxyComponent = (Cstr, cmpMeta, flags) => {
             // create an array of attributes to observe
             // and also create a map of html attribute name to js property name
             Cstr.observedAttributes = members
-                .filter(([_, m]) => m[0] & 15 /* HasAttribute */) // filter to only keep props that should match attributes
-                .map(([propName, m]) => {
-                const attrName = m[1] || propName;
-                attrNameToPropName.set(attrName, propName);
+                .filter(function (_a) {
+                var _ = _a[0], m = _a[1];
+                return m[0] & 15;
+            } /* HasAttribute */) // filter to only keep props that should match attributes
+                .map(function (_a) {
+                var propName = _a[0], m = _a[1];
+                var attrName = m[1] || propName;
+                attrNameToPropName_1.set(attrName, propName);
                 return attrName;
             });
         }
     }
     return Cstr;
 };
-
-const initializeComponent = async (elm, hostRef, cmpMeta, hmrVersionId, Cstr) => {
-    // initializeComponent
-    if ((hostRef.$flags$ & 256 /* hasInitializedComponent */) === 0) {
-        // we haven't initialized this element yet
-        hostRef.$flags$ |= 256 /* hasInitializedComponent */;
-        {
-            // lazy loaded components
-            // request the component's implementation to be
-            // wired up with the host element
-            Cstr = await loadModule(cmpMeta);
-            if (!Cstr.isProxied) {
-                // we'eve never proxied this Constructor before
-                // let's add the getters/setters to its prototype before
-                // the first time we create an instance of the implementation
-                {
-                    cmpMeta.$watchers$ = Cstr.watchers;
+var initializeComponent = function (elm, hostRef, cmpMeta, hmrVersionId, Cstr) { return __awaiter(_this, void 0, void 0, function () {
+    var style, scopeId, ancestorComponent;
+    return __generator(this, function (_a) {
+        switch (_a.label) {
+            case 0:
+                if (!((hostRef.$flags$ & 256 /* hasInitializedComponent */) === 0)) return [3 /*break*/, 2];
+                // we haven't initialized this element yet
+                hostRef.$flags$ |= 256 /* hasInitializedComponent */;
+                return [4 /*yield*/, loadModule(cmpMeta)];
+            case 1:
+                // lazy loaded components
+                // request the component's implementation to be
+                // wired up with the host element
+                Cstr = _a.sent();
+                if (!Cstr.isProxied) {
+                    // we'eve never proxied this Constructor before
+                    // let's add the getters/setters to its prototype before
+                    // the first time we create an instance of the implementation
+                    {
+                        cmpMeta.$watchers$ = Cstr.watchers;
+                    }
+                    proxyComponent(Cstr, cmpMeta, 2 /* proxyState */);
+                    Cstr.isProxied = true;
                 }
-                proxyComponent(Cstr, cmpMeta, 2 /* proxyState */);
-                Cstr.isProxied = true;
-            }
-            // ok, time to construct the instance
-            // but let's keep track of when we start and stop
-            // so that the getters/setters don't incorrectly step on data
-            {
-                hostRef.$flags$ |= 8 /* isConstructingInstance */;
-            }
-            // construct the lazy-loaded component implementation
-            // passing the hostRef is very important during
-            // construction in order to directly wire together the
-            // host element and the lazy-loaded instance
-            try {
-                new Cstr(hostRef);
-            }
-            catch (e) {
-                consoleError(e);
-            }
-            {
-                hostRef.$flags$ &= ~8 /* isConstructingInstance */;
-            }
-            fireConnectedCallback(hostRef.$lazyInstance$);
+                // ok, time to construct the instance
+                // but let's keep track of when we start and stop
+                // so that the getters/setters don't incorrectly step on data
+                {
+                    hostRef.$flags$ |= 8 /* isConstructingInstance */;
+                }
+                // construct the lazy-loaded component implementation
+                // passing the hostRef is very important during
+                // construction in order to directly wire together the
+                // host element and the lazy-loaded instance
+                try {
+                    new Cstr(hostRef);
+                }
+                catch (e) {
+                    consoleError(e);
+                }
+                {
+                    hostRef.$flags$ &= ~8 /* isConstructingInstance */;
+                }
+                fireConnectedCallback(hostRef.$lazyInstance$);
+                if (!Cstr.isStyleRegistered && Cstr.style) {
+                    style = Cstr.style;
+                    scopeId = getScopeId(cmpMeta.$tagName$, hostRef.$modeName$);
+                    registerStyle(scopeId, style, !!(cmpMeta.$flags$ & 1 /* shadowDomEncapsulation */));
+                    Cstr.isStyleRegistered = true;
+                }
+                _a.label = 2;
+            case 2:
+                ancestorComponent = hostRef.$ancestorComponent$;
+                if (ancestorComponent && !ancestorComponent['s-lr'] && ancestorComponent['s-rc']) {
+                    // this is the intial load and this component it has an ancestor component
+                    // but the ancestor component has NOT fired its will update lifecycle yet
+                    // so let's just cool our jets and wait for the ancestor to continue first
+                    ancestorComponent['s-rc'].push(function () {
+                        // this will get fired off when the ancestor component
+                        // finally gets around to rendering its lazy self
+                        // fire off the initial update
+                        return initializeComponent(elm, hostRef, cmpMeta);
+                    });
+                }
+                else {
+                    scheduleUpdate(elm, hostRef, cmpMeta, true);
+                }
+                return [2 /*return*/];
         }
-        if (!Cstr.isStyleRegistered && Cstr.style) {
-            // this component has styles but we haven't registered them yet
-            let style = Cstr.style;
-            let scopeId = getScopeId(cmpMeta.$tagName$, hostRef.$modeName$);
-            registerStyle(scopeId, style, !!(cmpMeta.$flags$ & 1 /* shadowDomEncapsulation */));
-            Cstr.isStyleRegistered = true;
-        }
-    }
-    // we've successfully created a lazy instance
-    const ancestorComponent = hostRef.$ancestorComponent$;
-    if (ancestorComponent && !ancestorComponent['s-lr'] && ancestorComponent['s-rc']) {
-        // this is the intial load and this component it has an ancestor component
-        // but the ancestor component has NOT fired its will update lifecycle yet
-        // so let's just cool our jets and wait for the ancestor to continue first
-        ancestorComponent['s-rc'].push(() => 
-        // this will get fired off when the ancestor component
-        // finally gets around to rendering its lazy self
-        // fire off the initial update
-        initializeComponent(elm, hostRef, cmpMeta));
-    }
-    else {
-        scheduleUpdate(elm, hostRef, cmpMeta, true);
-    }
+    });
+}); };
+var fireConnectedCallback = function (instance) {
 };
-
-const fireConnectedCallback = (instance) => {
-};
-const connectedCallback = (elm, cmpMeta) => {
+var connectedCallback = function (elm, cmpMeta) {
     if ((plt.$flags$ & 1 /* isTmpDisconnected */) === 0) {
         // connectedCallback
-        const hostRef = getHostRef(elm);
+        var hostRef = getHostRef(elm);
         if (!(hostRef.$flags$ & 1 /* hasConnected */)) {
             // first time this component has connected
             hostRef.$flags$ |= 1 /* hasConnected */;
             {
                 // find the first ancestor component (if there is one) and register
                 // this component as one of the actively loading child components for its ancestor
-                let ancestorComponent = elm;
+                var ancestorComponent = elm;
                 while ((ancestorComponent = (ancestorComponent.parentNode || ancestorComponent.host))) {
                     // climb up the ancestors looking for the first
                     // component that hasn't finished its lifecycle update yet
@@ -1088,9 +1144,10 @@ const connectedCallback = (elm, cmpMeta) => {
             // Lazy properties
             // https://developers.google.com/web/fundamentals/web-components/best-practices#lazy-properties
             if (cmpMeta.$members$) {
-                Object.entries(cmpMeta.$members$).forEach(([memberName, [memberFlags]]) => {
+                Object.entries(cmpMeta.$members$).forEach(function (_a) {
+                    var memberName = _a[0], memberFlags = _a[1][0];
                     if (memberFlags & 31 /* Prop */ && elm.hasOwnProperty(memberName)) {
-                        const value = elm[memberName];
+                        var value = elm[memberName];
                         delete elm[memberName];
                         elm[memberName] = value;
                     }
@@ -1103,21 +1160,21 @@ const connectedCallback = (elm, cmpMeta) => {
         fireConnectedCallback(hostRef.$lazyInstance$);
     }
 };
-
-const bootstrapLazy = (lazyBundles, options = {}) => {
-    const cmpTags = [];
-    const exclude = options.exclude || [];
-    const head = doc.head;
-    const customElements = win.customElements;
-    const y = /*@__PURE__*/ head.querySelector('meta[charset]');
-    const visibilityStyle = /*@__PURE__*/ doc.createElement('style');
+var bootstrapLazy = function (lazyBundles, options) {
+    if (options === void 0) { options = {}; }
+    var cmpTags = [];
+    var exclude = options.exclude || [];
+    var head = doc.head;
+    var customElements = win.customElements;
+    var y = /*@__PURE__*/ head.querySelector('meta[charset]');
+    var visibilityStyle = /*@__PURE__*/ doc.createElement('style');
     Object.assign(plt, options);
     plt.$resourcesUrl$ = new URL(options.resourcesUrl || '/', win.location.href).href;
     if (options.syncQueue) {
         plt.$flags$ |= 4 /* queueSync */;
     }
-    lazyBundles.forEach(lazyBundle => lazyBundle[1].forEach(compactMeta => {
-        const cmpMeta = {
+    lazyBundles.forEach(function (lazyBundle) { return lazyBundle[1].forEach(function (compactMeta) {
+        var cmpMeta = {
             $flags$: compactMeta[0],
             $tagName$: compactMeta[1],
             $members$: compactMeta[2],
@@ -1126,73 +1183,68 @@ const bootstrapLazy = (lazyBundles, options = {}) => {
         {
             cmpMeta.$watchers$ = {};
         }
-        const tagName = cmpMeta.$tagName$;
-        const HostElement = class extends HTMLElement {
+        var tagName = cmpMeta.$tagName$;
+        var HostElement = /** @class */ (function (_super) {
+            __extends(class_1, _super);
             // StencilLazyHost
-            constructor(self) {
+            function class_1(self) {
+                var _this = 
                 // @ts-ignore
-                super(self);
-                self = this;
+                _super.call(this, self) || this;
+                self = _this;
                 {
-                    this['s-lr'] = false;
-                    this['s-rc'] = [];
+                    _this['s-lr'] = false;
+                    _this['s-rc'] = [];
                 }
                 registerHost(self);
+                return _this;
             }
-            connectedCallback() {
+            class_1.prototype.connectedCallback = function () {
                 connectedCallback(this, cmpMeta);
-            }
-            disconnectedCallback() {
+            };
+            class_1.prototype.disconnectedCallback = function () {
                 disconnectedCallback(this);
-            }
-            's-init'() {
-                const hostRef = getHostRef(this);
+            };
+            class_1.prototype['s-init'] = function () {
+                var hostRef = getHostRef(this);
                 if (hostRef.$lazyInstance$) {
                     postUpdateComponent(this, hostRef);
                 }
-            }
-            's-hmr'(hmrVersionId) {
-            }
-            forceUpdate() {
+            };
+            class_1.prototype['s-hmr'] = function (hmrVersionId) {
+            };
+            class_1.prototype.forceUpdate = function () {
                 {
-                    const hostRef = getHostRef(this);
+                    var hostRef = getHostRef(this);
                     scheduleUpdate(this, hostRef, cmpMeta, false);
                 }
-            }
-            componentOnReady() {
+            };
+            class_1.prototype.componentOnReady = function () {
                 return getHostRef(this).$onReadyPromise$;
-            }
-        };
+            };
+            return class_1;
+        }(HTMLElement));
         cmpMeta.$lazyBundleIds$ = lazyBundle[0];
         if (!exclude.includes(tagName) && !customElements.get(tagName)) {
             cmpTags.push(tagName);
             customElements.define(tagName, proxyComponent(HostElement, cmpMeta, 1 /* isElementConstructor */));
         }
-    }));
+    }); });
     // visibilityStyle.innerHTML = cmpTags.map(t => `${t}:not(.hydrated)`) + '{display:none}';
     visibilityStyle.innerHTML = cmpTags + '{visibility:hidden}.hydrated{visibility:inherit}';
     visibilityStyle.setAttribute('data-styles', '');
     head.insertBefore(visibilityStyle, y ? y.nextSibling : head.firstChild);
 };
-
-const createEvent = (ref, name, flags) => {
-    const elm = getElement(ref);
+var createEvent = function (ref, name, flags) {
+    var elm = getElement(ref);
     return {
-        emit: (detail) => elm.dispatchEvent(new (CustomEvent)(name, {
+        emit: function (detail) { return elm.dispatchEvent(new (CustomEvent)(name, {
             bubbles: !!(flags & 4 /* Bubbles */),
             composed: !!(flags & 2 /* Composed */),
             cancelable: !!(flags & 1 /* Cancellable */),
-            detail
-        }))
+            detail: detail
+        })); }
     };
 };
-
-const getElement = (ref) => getHostRef(ref).$hostElement$;
-
-exports.bootstrapLazy = bootstrapLazy;
-exports.createEvent = createEvent;
-exports.getElement = getElement;
-exports.h = h;
-exports.patchBrowser = patchBrowser;
-exports.patchEsm = patchEsm;
-exports.registerInstance = registerInstance;
+var getElement = function (ref) { return getHostRef(ref).$hostElement$; };
+export { patchEsm as a, bootstrapLazy as b, createEvent as c, getElement as g, h, patchBrowser as p, registerInstance as r };

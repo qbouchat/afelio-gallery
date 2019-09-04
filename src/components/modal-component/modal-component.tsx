@@ -1,6 +1,6 @@
 import { Component, h, Prop, Element, State, Watch, Event, EventEmitter } from '@stencil/core';
 import { Image } from '../../models/images.model';
-import { Action } from '../../models/action.model';
+import { AfelioGalleryOptions } from '../../utils/interface/afelio-gallery-options.interface';
 
 
 @Component({
@@ -20,21 +20,9 @@ export class ModalComponent {
 		bubbles: true,
 	  }) deleteImage: EventEmitter;
 
-
-	@Prop() enableDelete: boolean;
-	@Prop() enableVisualDelete: boolean;
-	@Prop() enableRotate: boolean;
-	@Prop() enableBackdropClickClose: boolean;
-
-	@Prop() previousIconUrl: string;
-	@Prop() nextIconUrl: string;
-	@Prop() rotateIconUrl: string;
-	@Prop() closeIconUrl: string;
-	@Prop() deleteIconUrl: string;
-
 	@Prop() imagesLink: string[];
 	@Prop() indexImageShowed: number;
-	@Prop() actions: Action[];
+	@Prop() galleryOptions: AfelioGalleryOptions;
 
 	@State() currentRotation: number;
 	@State() showActions: boolean = false;
@@ -71,7 +59,7 @@ export class ModalComponent {
 	}
 
 	private handleClickModal(event: MouseEvent) {
-		if (this.enableBackdropClickClose && (event.target === event.currentTarget || event.target === this.modalContent)) {
+		if (this.galleryOptions.enableBackdropClickClose && (event.target === event.currentTarget || event.target === this.modalContent)) {
 			this.close();
 		}
 	}
@@ -90,7 +78,7 @@ export class ModalComponent {
 		const urlToRemove = this.imagesLink.find(link => link === this.images[this.indexImageShowed].url);
 		const indexToRemove = this.imagesLink.findIndex(link => link === urlToRemove )
 		const imageToDelete = {index: indexToRemove, imageUrl: urlToRemove };
-		if (this.enableVisualDelete) {
+		if (this.galleryOptions.enableVisualDelete) {
 			if (this.images.length > 1) {
 				this.images.splice(this.indexImageShowed, 1);
 				this.indexImageShowed = this.indexImageShowed === this.images.length ? this.indexImageShowed - 1 : this.indexImageShowed ;
@@ -110,7 +98,7 @@ export class ModalComponent {
 				{this.showActions &&
 					<ul class="afelio__gallery__more__actions">
 						{
-						this.actions.map((action) => {
+						this.galleryOptions.actions.map((action) => {
 							return (<li>{action.name}</li>);
 						})
 						}
@@ -128,10 +116,10 @@ export class ModalComponent {
         return (
             <div class="afelio__gallery__modal" onClick={(event) => this.handleClickModal(event)}>
 				<div class="afelio__gallery__header">
-					{this.enableRotate && <button class="afelio__gallery__header__btn afelio__gallery__btn__rotate" style={{'background-image': `url('${this.rotateIconUrl}')`}} onClick={this.rotate.bind(this)}></button>}
-					{this.enableDelete && <button class="afelio__gallery__header__btn afelio__gallery__btn__delete" style={{'background-image': `url('${this.deleteIconUrl}')`}} onClick={this.delete.bind(this)}></button>}
-					<button class="afelio__gallery__header__btn afelio__gallery__btn__close" style={{'background-image': `url('${this.closeIconUrl}')`}} onClick={this.close.bind(this)}></button>
-					{this.actions.length > 0 && this.generateActionsListButton()}
+					{this.galleryOptions.enableRotate && <button class="afelio__gallery__header__btn afelio__gallery__btn__rotate" style={{'background-image': `url('${this.galleryOptions.rotateIconUrl}')`}} onClick={this.rotate.bind(this)}></button>}
+					{this.galleryOptions.enableDelete && <button class="afelio__gallery__header__btn afelio__gallery__btn__delete" style={{'background-image': `url('${this.galleryOptions.deleteIconUrl}')`}} onClick={this.delete.bind(this)}></button>}
+					<button class="afelio__gallery__header__btn afelio__gallery__btn__close" style={{'background-image': `url('${this.galleryOptions.closeIconUrl}')`}} onClick={this.close.bind(this)}></button>
+					{this.galleryOptions.actions.length > 0 && this.generateActionsListButton()}
 				</div>
 
 				<div class="afelio__gallery__modal__content" ref={(el) => this.modalContent = el as HTMLInputElement}>
@@ -142,8 +130,8 @@ export class ModalComponent {
 					})}
 				</div>
 
-				{this.indexImageShowed !== 0 && <button class="afelio__gallery__btn__previous" style={{'background-image': `url('${this.previousIconUrl}')`}} onClick={this.previous.bind(this)}></button>}
-				{this.indexImageShowed !== this.images.length - 1 && <button class="afelio__gallery__btn__next" style={{'background-image': `url('${this.nextIconUrl}')`}} onClick={this.next.bind(this)}></button>}
+				{this.indexImageShowed !== 0 && <button class="afelio__gallery__btn__previous" style={{'background-image': `url('${this.galleryOptions.previousIconUrl}')`}} onClick={this.previous.bind(this)}></button>}
+				{this.indexImageShowed !== this.images.length - 1 && <button class="afelio__gallery__btn__next" style={{'background-image': `url('${this.galleryOptions.nextIconUrl}')`}} onClick={this.next.bind(this)}></button>}
             </div>
         );
     }

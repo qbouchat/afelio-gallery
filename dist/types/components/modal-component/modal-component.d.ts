@@ -1,22 +1,13 @@
 import { EventEmitter } from '../../stencil.core';
 import { Image } from '../../models/images.model';
-import { Action } from '../../models/action.model';
+import { AfelioGalleryOptions } from '../../utils/interface/afelio-gallery-options.interface';
 export declare class ModalComponent {
     modal: HTMLElement;
     modalContent: HTMLElement;
     deleteImage: EventEmitter;
-    enableDelete: boolean;
-    enableVisualDelete: boolean;
-    enableRotate: boolean;
-    enableBackdropClickClose: boolean;
-    previousIconUrl: string;
-    nextIconUrl: string;
-    rotateIconUrl: string;
-    closeIconUrl: string;
-    deleteIconUrl: string;
     imagesLink: string[];
     indexImageShowed: number;
-    actions: Action[];
+    galleryOptions: AfelioGalleryOptions;
     currentRotation: number;
     showActions: boolean;
     images: Image[];

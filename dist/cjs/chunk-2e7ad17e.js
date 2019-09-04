@@ -1,3 +1,5 @@
+'use strict';
+
 const NAMESPACE = 'gallery';
 
 const win = window;
@@ -39,11 +41,11 @@ const consoleError = (e) => console.error(e);
 const loadModule = (cmpMeta, hostRef, hmrVersionId) => {
     // loadModuleImport
     const bundleId = cmpMeta.$lazyBundleIds$;
-    return import(
+    return Promise.resolve(require(
     /* webpackInclude: /\.entry\.js$/ */
     /* webpackExclude: /\.system\.entry\.js$/ */
     /* webpackMode: "lazy" */
-    `./${bundleId}.entry.js${''}`).then(importedModule => importedModule[cmpMeta.$tagName$.replace(/-/g, '_')], consoleError);
+    `./${bundleId}.entry.js${''}`)).then(importedModule => importedModule[cmpMeta.$tagName$.replace(/-/g, '_')], consoleError);
 };
 
 const styles = new Map();
@@ -143,13 +145,13 @@ const patchEsm = () => {
     // @ts-ignore
     if (!(win.CSS && win.CSS.supports && win.CSS.supports('color', 'var(--c)'))) {
         // @ts-ignore
-        return import('./css-shim-f7ddb189-f7ddb189.js');
+        return Promise.resolve(require('./css-shim-f7ddb189-673dd43d.js'));
     }
     return Promise.resolve();
 };
 const patchBrowser = async () => {
     // @ts-ignore
-    const importMeta = "";
+    const importMeta = (typeof document === 'undefined' ? new (require('u' + 'rl').URL)('file:' + __filename).href : (document.currentScript && document.currentScript.src || new URL('chunk-2e7ad17e.js', document.baseURI).href));
     if (importMeta !== '') {
         return Promise.resolve(new URL('.', importMeta).href);
     }
@@ -160,7 +162,7 @@ const patchBrowser = async () => {
         patchDynamicImport(resourcesUrl.href);
         if (!window.customElements) {
             // @ts-ignore
-            await import('./dom-a0c82e31-a0c82e31.js');
+            await Promise.resolve(require('./dom-a0c82e31-d4621515.js'));
         }
         return resourcesUrl.href;
     }
@@ -878,19 +880,9 @@ const disconnectedCallback = (elm) => {
 const parsePropertyValue = (propValue, propType) => {
     // ensure this value is of the correct prop type
     if (propValue != null && !isComplexType(propValue)) {
-        if (propType & 4 /* Boolean */) {
-            // per the HTML spec, any string value means it is a boolean true value
-            // but we'll cheat here and say that the string "false" is the boolean false
-            return (propValue === 'false' ? false : propValue === '' || !!propValue);
-        }
         if (propType & 2 /* Number */) {
             // force it to be a number
             return parseFloat(propValue);
-        }
-        if (propType & 1 /* String */) {
-            // could have been passed as a number or boolean
-            // but we still want it as a string
-            return String(propValue);
         }
         // redundant return here for better minification
         return propValue;
@@ -1187,4 +1179,10 @@ const createEvent = (ref, name, flags) => {
 
 const getElement = (ref) => getHostRef(ref).$hostElement$;
 
-export { patchEsm as a, bootstrapLazy as b, createEvent as c, getElement as g, h, patchBrowser as p, registerInstance as r };
+exports.bootstrapLazy = bootstrapLazy;
+exports.createEvent = createEvent;
+exports.getElement = getElement;
+exports.h = h;
+exports.patchBrowser = patchBrowser;
+exports.patchEsm = patchEsm;
+exports.registerInstance = registerInstance;
