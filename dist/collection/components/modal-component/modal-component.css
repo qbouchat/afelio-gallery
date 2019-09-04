@@ -37,7 +37,7 @@
   transform: rotate(0deg);
   transition: transform 0.3s ease-in-out;
 }
-.afelio__gallery__modal .afelio__gallery__btn__rotate, .afelio__gallery__modal .afelio__gallery__btn__previous, .afelio__gallery__modal .afelio__gallery__btn__next, .afelio__gallery__modal .afelio__gallery__btn__close {
+.afelio__gallery__modal .afelio__gallery__btn__rotate, .afelio__gallery__modal .afelio__gallery__btn__delete, .afelio__gallery__modal .afelio__gallery__btn__previous, .afelio__gallery__modal .afelio__gallery__btn__next, .afelio__gallery__modal .afelio__gallery__btn__close {
   background-color: transparent;
   background-position: center center;
   background-repeat: no-repeat;
