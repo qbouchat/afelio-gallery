@@ -124,17 +124,19 @@ var ModalComponent = /** @class */ (function () {
         this.deleteImage.emit(imageToDelete);
     };
     ModalComponent.prototype.generateActionsListButton = function () {
-        return (h("div", { class: "afelio__gallery__actions__list-container" }, h("button", { class: "afelio__gallery__more__actions", onClick: this.showActionsList.bind(this) }), this.showActions &&
-            h("ul", { class: "afelio__gallery__more__actions" }, this.galleryOptions.actions.map(function (action) {
-                return (h("li", null, action.name));
-            }))));
+        if (this.galleryOptions.actions && this.galleryOptions.actions.length > 0) {
+            return (h("div", { class: "afelio__gallery__actions__list-container" }, h("button", { class: "afelio__gallery__more__actions", onClick: this.showActionsList.bind(this) }), this.showActions &&
+                h("ul", { class: "afelio__gallery__more__actions" }, this.galleryOptions.actions.map(function (action) {
+                    return (h("li", null, action.name));
+                }))));
+        }
     };
     ModalComponent.prototype.showActionsList = function () {
         this.showActions = !this.showActions;
     };
     ModalComponent.prototype.render = function () {
         var _this = this;
-        return (h("div", { class: "afelio__gallery__modal", onClick: function (event) { return _this.handleClickModal(event); } }, h("div", { class: "afelio__gallery__header" }, this.galleryOptions.enableRotate && h("button", { class: "afelio__gallery__header__btn afelio__gallery__btn__rotate", style: { 'background-image': "url('" + this.galleryOptions.rotateIconUrl + "')" }, onClick: this.rotate.bind(this) }), this.galleryOptions.enableDelete && h("button", { class: "afelio__gallery__header__btn afelio__gallery__btn__delete", style: { 'background-image': "url('" + this.galleryOptions.deleteIconUrl + "')" }, onClick: this.delete.bind(this) }), h("button", { class: "afelio__gallery__header__btn afelio__gallery__btn__close", style: { 'background-image': "url('" + this.galleryOptions.closeIconUrl + "')" }, onClick: this.close.bind(this) }), this.galleryOptions.actions && this.galleryOptions.actions.length > 0 && this.generateActionsListButton()), h("div", { class: "afelio__gallery__modal__content", ref: function (el) { return _this.modalContent = el; } }, this.images.map(function (img, index) {
+        return (h("div", { class: "afelio__gallery__modal", onClick: function (event) { return _this.handleClickModal(event); } }, h("div", { class: "afelio__gallery__header" }, this.galleryOptions.enableRotate && h("button", { class: "afelio__gallery__header__btn afelio__gallery__btn__rotate", style: { 'background-image': "url('" + this.galleryOptions.rotateIconUrl + "')" }, onClick: this.rotate.bind(this) }), this.galleryOptions.enableDelete && h("button", { class: "afelio__gallery__header__btn afelio__gallery__btn__delete", style: { 'background-image': "url('" + this.galleryOptions.deleteIconUrl + "')" }, onClick: this.delete.bind(this) }), h("button", { class: "afelio__gallery__header__btn afelio__gallery__btn__close", style: { 'background-image': "url('" + this.galleryOptions.closeIconUrl + "')" }, onClick: this.close.bind(this) }), this.generateActionsListButton()), h("div", { class: "afelio__gallery__modal__content", ref: function (el) { return _this.modalContent = el; } }, this.images.map(function (img, index) {
             if (img === _this.images[_this.indexImageShowed]) {
                 return (h("img", { key: index, src: _this.images[_this.indexImageShowed].url, style: { 'transform': "rotate(" + _this.currentRotation + "deg)" } }));
             }

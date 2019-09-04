@@ -92,20 +92,22 @@ export class ModalComponent {
 	}
 
 	private generateActionsListButton() {
-		return (
-			<div class="afelio__gallery__actions__list-container">
-				<button class="afelio__gallery__more__actions" onClick={this.showActionsList.bind(this)}></button>
-				{this.showActions &&
-					<ul class="afelio__gallery__more__actions">
-						{
-						this.galleryOptions.actions.map((action) => {
-							return (<li>{action.name}</li>);
-						})
-						}
-					</ul>
-			}
-			</div>
-		);
+		if (this.galleryOptions.actions && this.galleryOptions.actions.length > 0) {
+			return (
+				<div class="afelio__gallery__actions__list-container">
+					<button class="afelio__gallery__more__actions" onClick={this.showActionsList.bind(this)}></button>
+					{this.showActions &&
+						<ul class="afelio__gallery__more__actions">
+							{
+							this.galleryOptions.actions.map((action) => {
+								return (<li>{action.name}</li>);
+							})
+							}
+						</ul>
+				}
+				</div>
+			);
+		}
 	}
 
 	private showActionsList() {
@@ -119,7 +121,7 @@ export class ModalComponent {
 					{this.galleryOptions.enableRotate && <button class="afelio__gallery__header__btn afelio__gallery__btn__rotate" style={{'background-image': `url('${this.galleryOptions.rotateIconUrl}')`}} onClick={this.rotate.bind(this)}></button>}
 					{this.galleryOptions.enableDelete && <button class="afelio__gallery__header__btn afelio__gallery__btn__delete" style={{'background-image': `url('${this.galleryOptions.deleteIconUrl}')`}} onClick={this.delete.bind(this)}></button>}
 					<button class="afelio__gallery__header__btn afelio__gallery__btn__close" style={{'background-image': `url('${this.galleryOptions.closeIconUrl}')`}} onClick={this.close.bind(this)}></button>
-					{this.galleryOptions.actions && this.galleryOptions.actions.length > 0 && this.generateActionsListButton()}
+					{this.generateActionsListButton()}
 				</div>
 
 				<div class="afelio__gallery__modal__content" ref={(el) => this.modalContent = el as HTMLInputElement}>

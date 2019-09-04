@@ -117,16 +117,18 @@ class ModalComponent {
         this.deleteImage.emit(imageToDelete);
     }
     generateActionsListButton() {
-        return (__chunk_1.h("div", { class: "afelio__gallery__actions__list-container" }, __chunk_1.h("button", { class: "afelio__gallery__more__actions", onClick: this.showActionsList.bind(this) }), this.showActions &&
-            __chunk_1.h("ul", { class: "afelio__gallery__more__actions" }, this.galleryOptions.actions.map((action) => {
-                return (__chunk_1.h("li", null, action.name));
-            }))));
+        if (this.galleryOptions.actions && this.galleryOptions.actions.length > 0) {
+            return (__chunk_1.h("div", { class: "afelio__gallery__actions__list-container" }, __chunk_1.h("button", { class: "afelio__gallery__more__actions", onClick: this.showActionsList.bind(this) }), this.showActions &&
+                __chunk_1.h("ul", { class: "afelio__gallery__more__actions" }, this.galleryOptions.actions.map((action) => {
+                    return (__chunk_1.h("li", null, action.name));
+                }))));
+        }
     }
     showActionsList() {
         this.showActions = !this.showActions;
     }
     render() {
-        return (__chunk_1.h("div", { class: "afelio__gallery__modal", onClick: (event) => this.handleClickModal(event) }, __chunk_1.h("div", { class: "afelio__gallery__header" }, this.galleryOptions.enableRotate && __chunk_1.h("button", { class: "afelio__gallery__header__btn afelio__gallery__btn__rotate", style: { 'background-image': `url('${this.galleryOptions.rotateIconUrl}')` }, onClick: this.rotate.bind(this) }), this.galleryOptions.enableDelete && __chunk_1.h("button", { class: "afelio__gallery__header__btn afelio__gallery__btn__delete", style: { 'background-image': `url('${this.galleryOptions.deleteIconUrl}')` }, onClick: this.delete.bind(this) }), __chunk_1.h("button", { class: "afelio__gallery__header__btn afelio__gallery__btn__close", style: { 'background-image': `url('${this.galleryOptions.closeIconUrl}')` }, onClick: this.close.bind(this) }), this.galleryOptions.actions && this.galleryOptions.actions.length > 0 && this.generateActionsListButton()), __chunk_1.h("div", { class: "afelio__gallery__modal__content", ref: (el) => this.modalContent = el }, this.images.map((img, index) => {
+        return (__chunk_1.h("div", { class: "afelio__gallery__modal", onClick: (event) => this.handleClickModal(event) }, __chunk_1.h("div", { class: "afelio__gallery__header" }, this.galleryOptions.enableRotate && __chunk_1.h("button", { class: "afelio__gallery__header__btn afelio__gallery__btn__rotate", style: { 'background-image': `url('${this.galleryOptions.rotateIconUrl}')` }, onClick: this.rotate.bind(this) }), this.galleryOptions.enableDelete && __chunk_1.h("button", { class: "afelio__gallery__header__btn afelio__gallery__btn__delete", style: { 'background-image': `url('${this.galleryOptions.deleteIconUrl}')` }, onClick: this.delete.bind(this) }), __chunk_1.h("button", { class: "afelio__gallery__header__btn afelio__gallery__btn__close", style: { 'background-image': `url('${this.galleryOptions.closeIconUrl}')` }, onClick: this.close.bind(this) }), this.generateActionsListButton()), __chunk_1.h("div", { class: "afelio__gallery__modal__content", ref: (el) => this.modalContent = el }, this.images.map((img, index) => {
             if (img === this.images[this.indexImageShowed]) {
                 return (__chunk_1.h("img", { key: index, src: this.images[this.indexImageShowed].url, style: { 'transform': `rotate(${this.currentRotation}deg)` } }));
             }
