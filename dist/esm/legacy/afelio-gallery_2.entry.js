@@ -37,7 +37,7 @@ var MyComponent = /** @class */ (function () {
         this.modal.indexImageShowed = indexImage;
         this.modal.galleryOptions = this.galleryOptions;
         this.modal.addEventListener('deleteImage', function (e) {
-            _this.deleteImage.emit(e);
+            _this.deleteImage.emit(e.detail);
         });
         document.body.appendChild(this.modal);
     };

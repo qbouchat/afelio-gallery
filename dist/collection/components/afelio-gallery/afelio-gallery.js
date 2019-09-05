@@ -34,7 +34,7 @@ export class MyComponent {
         this.modal.indexImageShowed = indexImage;
         this.modal.galleryOptions = this.galleryOptions;
         this.modal.addEventListener('deleteImage', (e) => {
-            this.deleteImage.emit(e);
+            this.deleteImage.emit(e.detail);
         });
         document.body.appendChild(this.modal);
     }
