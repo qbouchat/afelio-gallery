@@ -24,7 +24,7 @@
 
 ### Depends on
 
-- [modal-component](..\modal-component)
+- [modal-component](../modal-component)
 
 ### Graph
 ```mermaid

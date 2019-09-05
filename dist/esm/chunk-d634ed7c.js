@@ -1,5 +1,3 @@
-'use strict';
-
 const NAMESPACE = 'gallery';
 
 const win = window;
@@ -11,6 +9,16 @@ const plt = {
     ael: (el, eventName, listener, opts) => el.addEventListener(eventName, listener, opts),
     rel: (el, eventName, listener, opts) => el.removeEventListener(eventName, listener, opts),
 };
+const supportsListenerOptions = /*@__PURE__*/ (() => {
+    let supportsListenerOptions = false;
+    try {
+        doc.addEventListener('e', null, Object.defineProperty({}, 'passive', {
+            get() { supportsListenerOptions = true; }
+        }));
+    }
+    catch (e) { }
+    return supportsListenerOptions;
+})();
 const supportsConstructibleStylesheets = (() => {
     try {
         new CSSStyleSheet();
@@ -41,11 +49,11 @@ const consoleError = (e) => console.error(e);
 const loadModule = (cmpMeta, hostRef, hmrVersionId) => {
     // loadModuleImport
     const bundleId = cmpMeta.$lazyBundleIds$;
-    return Promise.resolve(require(
+    return import(
     /* webpackInclude: /\.entry\.js$/ */
     /* webpackExclude: /\.system\.entry\.js$/ */
     /* webpackMode: "lazy" */
-    `./${bundleId}.entry.js${''}`)).then(importedModule => importedModule[cmpMeta.$tagName$.replace(/-/g, '_')], consoleError);
+    `./${bundleId}.entry.js${''}`).then(importedModule => importedModule[cmpMeta.$tagName$.replace(/-/g, '_')], consoleError);
 };
 
 const styles = new Map();
@@ -145,13 +153,13 @@ const patchEsm = () => {
     // @ts-ignore
     if (!(win.CSS && win.CSS.supports && win.CSS.supports('color', 'var(--c)'))) {
         // @ts-ignore
-        return Promise.resolve(require('./css-shim-f7ddb189-673dd43d.js'));
+        return import('./css-shim-f7ddb189-f7ddb189.js');
     }
     return Promise.resolve();
 };
 const patchBrowser = async () => {
     // @ts-ignore
-    const importMeta = (typeof document === 'undefined' ? new (require('u' + 'rl').URL)('file:' + __filename).href : (document.currentScript && document.currentScript.src || new URL('chunk-2e7ad17e.js', document.baseURI).href));
+    const importMeta = "";
     if (importMeta !== '') {
         return Promise.resolve(new URL('.', importMeta).href);
     }
@@ -162,7 +170,7 @@ const patchBrowser = async () => {
         patchDynamicImport(resourcesUrl.href);
         if (!window.customElements) {
             // @ts-ignore
-            await Promise.resolve(require('./dom-a0c82e31-d4621515.js'));
+            await import('./dom-a0c82e31-a0c82e31.js');
         }
         return resourcesUrl.href;
     }
@@ -869,6 +877,12 @@ const postUpdateComponent = (elm, hostRef, ancestorsActivelyLoadingChildren) => 
 const disconnectedCallback = (elm) => {
     if ((plt.$flags$ & 1 /* isTmpDisconnected */) === 0) {
         const hostRef = getHostRef(elm);
+        {
+            if (hostRef.$rmListeners$) {
+                hostRef.$rmListeners$();
+                hostRef.$rmListeners$ = undefined;
+            }
+        }
         // clear CSS var-shim tracking
         if (cssVarShim) {
             cssVarShim.removeHost(elm);
@@ -982,6 +996,41 @@ const proxyComponent = (Cstr, cmpMeta, flags) => {
     return Cstr;
 };
 
+const addEventListeners = (elm, hostRef, listeners) => {
+    const removeFns = listeners.map(([flags, name, method]) => {
+        const target = (getHostListenerTarget(elm, flags));
+        const handler = hostListenerProxy(hostRef, method);
+        const opts = hostListenerOpts(flags);
+        plt.ael(target, name, handler, opts);
+        return () => plt.rel(target, name, handler, opts);
+    });
+    return () => removeFns.forEach(fn => fn());
+};
+const hostListenerProxy = (hostRef, methodName) => {
+    return (ev) => {
+        {
+            if (hostRef.$lazyInstance$) {
+                // instance is ready, let's call it's member method for this event
+                return hostRef.$lazyInstance$[methodName](ev);
+            }
+            else {
+                return hostRef.$onReadyPromise$.then(() => hostRef.$lazyInstance$[methodName](ev)).catch(consoleError);
+            }
+        }
+    };
+};
+const getHostListenerTarget = (elm, flags) => {
+    if (flags & 4 /* TargetDocument */)
+        return doc;
+    return elm;
+};
+const hostListenerOpts = (flags) => supportsListenerOptions ?
+    {
+        'passive': (flags & 1 /* Passive */) !== 0,
+        'capture': (flags & 2 /* Capture */) !== 0,
+    }
+    : (flags & 2 /* Capture */) !== 0;
+
 const initializeComponent = async (elm, hostRef, cmpMeta, hmrVersionId, Cstr) => {
     // initializeComponent
     if ((hostRef.$flags$ & 256 /* hasInitializedComponent */) === 0) {
@@ -1054,6 +1103,12 @@ const connectedCallback = (elm, cmpMeta) => {
     if ((plt.$flags$ & 1 /* isTmpDisconnected */) === 0) {
         // connectedCallback
         const hostRef = getHostRef(elm);
+        if (cmpMeta.$listeners$) {
+            // initialize our event listeners on the host element
+            // we do this now so that we can listening to events that may
+            // have fired even before the instance is ready
+            hostRef.$rmListeners$ = addEventListeners(elm, hostRef, cmpMeta.$listeners$);
+        }
         if (!(hostRef.$flags$ & 1 /* hasConnected */)) {
             // first time this component has connected
             hostRef.$flags$ |= 1 /* hasConnected */;
@@ -1179,10 +1234,4 @@ const createEvent = (ref, name, flags) => {
 
 const getElement = (ref) => getHostRef(ref).$hostElement$;
 
-exports.bootstrapLazy = bootstrapLazy;
-exports.createEvent = createEvent;
-exports.getElement = getElement;
-exports.h = h;
-exports.patchBrowser = patchBrowser;
-exports.patchEsm = patchEsm;
-exports.registerInstance = registerInstance;
+export { patchEsm as a, bootstrapLazy as b, createEvent as c, getElement as g, h, patchBrowser as p, registerInstance as r };

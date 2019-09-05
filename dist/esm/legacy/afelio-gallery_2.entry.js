@@ -1,4 +1,4 @@
-import { r as registerInstance, c as createEvent, h, g as getElement } from './chunk-6d993826.js';
+import { r as registerInstance, c as createEvent, h, g as getElement } from './chunk-d634ed7c.js';
 var MyComponent = /** @class */ (function () {
     function MyComponent(hostRef) {
         registerInstance(this, hostRef);
@@ -17,7 +17,13 @@ var MyComponent = /** @class */ (function () {
             actions: []
         };
         // IMAGES ARRAY
-        this.images = [];
+        this.images = [
+            'https://mir-s3-cdn-cf.behance.net/project_modules/disp/f3ccfd16712237.562b038d23834.jpg',
+            'https://mir-s3-cdn-cf.behance.net/project_modules/disp/4744a716712237.562b033d7fea6.jpg',
+            'https://mir-s3-cdn-cf.behance.net/project_modules/max_1200/2cd83916611375.562aebbd4d825.jpg',
+            'https://mir-s3-cdn-cf.behance.net/project_modules/max_1200/4975fe16611375.562aebbda1128.jpg',
+            'https://mir-s3-cdn-cf.behance.net/project_modules/disp/211cfd16598783.562ae84b9b4b4.jpg'
+        ];
         this.deleteImage = createEvent(this, "deleteImage", 7);
     }
     MyComponent.prototype.changeImages = function () {
@@ -68,10 +74,29 @@ var ModalComponent = /** @class */ (function () {
         this.showActions = false;
         this.deleteImage = createEvent(this, "deleteImage", 7);
     }
-    ModalComponent.prototype.changeImages = function (images, oldImages) {
-        console.log(images, oldImages);
-        this.currentRotation = 0;
-        this.images = images.map(function (img) { return new Image(img); });
+    ModalComponent.prototype.changeImages = function (newImages, oldImages) {
+        console.log(newImages, oldImages);
+        this.indexImageShowed = this.findCloserIndexAvailable(newImages);
+        this.images = newImages.map(function (img) { return new Image(img); });
+    };
+    ModalComponent.prototype.handleKeyDown = function (ev) {
+        switch (ev.key) {
+            case 'ArrowRight':
+                if (this.indexImageShowed < this.images.length - 1) {
+                    this.next();
+                }
+                break;
+            case 'ArrowLeft':
+                if (this.indexImageShowed > 0) {
+                    this.previous();
+                }
+                break;
+            case 'Escape':
+                this.close();
+                break;
+            default:
+                break;
+        }
     };
     ModalComponent.prototype.componentWillLoad = function () {
         this.images = this.imagesLink.map(function (img) { return new Image(img); });
@@ -122,6 +147,13 @@ var ModalComponent = /** @class */ (function () {
             }
         }
         this.deleteImage.emit(imageToDelete);
+    };
+    ModalComponent.prototype.findCloserIndexAvailable = function (images) {
+        var closerIndex = this.indexImageShowed;
+        while ((!images[closerIndex]) && (closerIndex !== 0)) {
+            closerIndex--;
+        }
+        return closerIndex;
     };
     ModalComponent.prototype.generateActionsListButton = function () {
         if (this.galleryOptions.actions && this.galleryOptions.actions.length > 0) {

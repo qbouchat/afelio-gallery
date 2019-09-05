@@ -1,4 +1,4 @@
-import { r as registerInstance, c as createEvent, h, g as getElement } from './chunk-6d993826.js';
+import { r as registerInstance, c as createEvent, h, g as getElement } from './chunk-d634ed7c.js';
 
 class MyComponent {
     constructor(hostRef) {
@@ -18,7 +18,13 @@ class MyComponent {
             actions: []
         };
         // IMAGES ARRAY
-        this.images = [];
+        this.images = [
+            'https://mir-s3-cdn-cf.behance.net/project_modules/disp/f3ccfd16712237.562b038d23834.jpg',
+            'https://mir-s3-cdn-cf.behance.net/project_modules/disp/4744a716712237.562b033d7fea6.jpg',
+            'https://mir-s3-cdn-cf.behance.net/project_modules/max_1200/2cd83916611375.562aebbd4d825.jpg',
+            'https://mir-s3-cdn-cf.behance.net/project_modules/max_1200/4975fe16611375.562aebbda1128.jpg',
+            'https://mir-s3-cdn-cf.behance.net/project_modules/disp/211cfd16598783.562ae84b9b4b4.jpg'
+        ];
         this.deleteImage = createEvent(this, "deleteImage", 7);
     }
     changeImages() {
@@ -57,10 +63,29 @@ class ModalComponent {
         this.showActions = false;
         this.deleteImage = createEvent(this, "deleteImage", 7);
     }
-    changeImages(images, oldImages) {
-        console.log(images, oldImages);
-        this.currentRotation = 0;
-        this.images = images.map((img) => new Image(img));
+    changeImages(newImages, oldImages) {
+        console.log(newImages, oldImages);
+        this.indexImageShowed = this.findCloserIndexAvailable(newImages);
+        this.images = newImages.map((img) => new Image(img));
+    }
+    handleKeyDown(ev) {
+        switch (ev.key) {
+            case 'ArrowRight':
+                if (this.indexImageShowed < this.images.length - 1) {
+                    this.next();
+                }
+                break;
+            case 'ArrowLeft':
+                if (this.indexImageShowed > 0) {
+                    this.previous();
+                }
+                break;
+            case 'Escape':
+                this.close();
+                break;
+            default:
+                break;
+        }
     }
     componentWillLoad() {
         this.images = this.imagesLink.map((img) => new Image(img));
@@ -110,6 +135,13 @@ class ModalComponent {
             }
         }
         this.deleteImage.emit(imageToDelete);
+    }
+    findCloserIndexAvailable(images) {
+        let closerIndex = this.indexImageShowed;
+        while ((!images[closerIndex]) && (closerIndex !== 0)) {
+            closerIndex--;
+        }
+        return closerIndex;
     }
     generateActionsListButton() {
         if (this.galleryOptions.actions && this.galleryOptions.actions.length > 0) {

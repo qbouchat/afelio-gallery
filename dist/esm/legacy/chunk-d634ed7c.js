@@ -57,6 +57,16 @@ var plt = {
     ael: function (el, eventName, listener, opts) { return el.addEventListener(eventName, listener, opts); },
     rel: function (el, eventName, listener, opts) { return el.removeEventListener(eventName, listener, opts); },
 };
+var supportsListenerOptions = /*@__PURE__*/ (function () {
+    var supportsListenerOptions = false;
+    try {
+        doc.addEventListener('e', null, Object.defineProperty({}, 'passive', {
+            get: function () { supportsListenerOptions = true; }
+        }));
+    }
+    catch (e) { }
+    return supportsListenerOptions;
+})();
 var supportsConstructibleStylesheets = (function () {
     try {
         new CSSStyleSheet();
@@ -929,6 +939,12 @@ var postUpdateComponent = function (elm, hostRef, ancestorsActivelyLoadingChildr
 var disconnectedCallback = function (elm) {
     if ((plt.$flags$ & 1 /* isTmpDisconnected */) === 0) {
         var hostRef = getHostRef(elm);
+        {
+            if (hostRef.$rmListeners$) {
+                hostRef.$rmListeners$();
+                hostRef.$rmListeners$ = undefined;
+            }
+        }
         // clear CSS var-shim tracking
         if (cssVarShim) {
             cssVarShim.removeHost(elm);
@@ -1043,6 +1059,41 @@ var proxyComponent = function (Cstr, cmpMeta, flags) {
     }
     return Cstr;
 };
+var addEventListeners = function (elm, hostRef, listeners) {
+    var removeFns = listeners.map(function (_a) {
+        var flags = _a[0], name = _a[1], method = _a[2];
+        var target = (getHostListenerTarget(elm, flags));
+        var handler = hostListenerProxy(hostRef, method);
+        var opts = hostListenerOpts(flags);
+        plt.ael(target, name, handler, opts);
+        return function () { return plt.rel(target, name, handler, opts); };
+    });
+    return function () { return removeFns.forEach(function (fn) { return fn(); }); };
+};
+var hostListenerProxy = function (hostRef, methodName) {
+    return function (ev) {
+        {
+            if (hostRef.$lazyInstance$) {
+                // instance is ready, let's call it's member method for this event
+                return hostRef.$lazyInstance$[methodName](ev);
+            }
+            else {
+                return hostRef.$onReadyPromise$.then(function () { return hostRef.$lazyInstance$[methodName](ev); }).catch(consoleError);
+            }
+        }
+    };
+};
+var getHostListenerTarget = function (elm, flags) {
+    if (flags & 4 /* TargetDocument */)
+        return doc;
+    return elm;
+};
+var hostListenerOpts = function (flags) { return supportsListenerOptions ?
+    {
+        'passive': (flags & 1 /* Passive */) !== 0,
+        'capture': (flags & 2 /* Capture */) !== 0,
+    }
+    : (flags & 2 /* Capture */) !== 0; };
 var initializeComponent = function (elm, hostRef, cmpMeta, hmrVersionId, Cstr) { return __awaiter(_this, void 0, void 0, function () {
     var style, scopeId, ancestorComponent;
     return __generator(this, function (_a) {
@@ -1120,6 +1171,12 @@ var connectedCallback = function (elm, cmpMeta) {
     if ((plt.$flags$ & 1 /* isTmpDisconnected */) === 0) {
         // connectedCallback
         var hostRef = getHostRef(elm);
+        if (cmpMeta.$listeners$) {
+            // initialize our event listeners on the host element
+            // we do this now so that we can listening to events that may
+            // have fired even before the instance is ready
+            hostRef.$rmListeners$ = addEventListeners(elm, hostRef, cmpMeta.$listeners$);
+        }
         if (!(hostRef.$flags$ & 1 /* hasConnected */)) {
             // first time this component has connected
             hostRef.$flags$ |= 1 /* hasConnected */;
