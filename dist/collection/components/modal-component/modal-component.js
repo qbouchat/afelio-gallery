@@ -4,10 +4,28 @@ export class ModalComponent {
     constructor() {
         this.showActions = false;
     }
-    changeImages(images, oldImages) {
-        console.log(images, oldImages);
-        this.currentRotation = 0;
-        this.images = images.map((img) => new Image(img));
+    changeImages(newImages) {
+        this.indexImageShowed = this.findCloserIndexAvailable(newImages);
+        this.images = newImages.map((img) => new Image(img));
+    }
+    handleKeyDown(ev) {
+        switch (ev.key) {
+            case 'ArrowRight':
+                if (this.indexImageShowed < this.images.length - 1) {
+                    this.next();
+                }
+                break;
+            case 'ArrowLeft':
+                if (this.indexImageShowed > 0) {
+                    this.previous();
+                }
+                break;
+            case 'Escape':
+                this.close();
+                break;
+            default:
+                break;
+        }
     }
     componentWillLoad() {
         this.images = this.imagesLink.map((img) => new Image(img));
@@ -29,7 +47,7 @@ export class ModalComponent {
         this.currentRotation = this.images[this.indexImageShowed].rotation;
     }
     handleClickModal(event) {
-        if (this.enableBackdropClickClose && (event.target === event.currentTarget || event.target === this.modalContent)) {
+        if (this.galleryOptions.enableBackdropClickClose && (event.target === event.currentTarget || event.target === this.modalContent)) {
             this.close();
         }
     }
@@ -45,7 +63,7 @@ export class ModalComponent {
         const urlToRemove = this.imagesLink.find(link => link === this.images[this.indexImageShowed].url);
         const indexToRemove = this.imagesLink.findIndex(link => link === urlToRemove);
         const imageToDelete = { index: indexToRemove, imageUrl: urlToRemove };
-        if (this.enableVisualDelete) {
+        if (this.galleryOptions.enableVisualDelete) {
             if (this.images.length > 1) {
                 this.images.splice(this.indexImageShowed, 1);
                 this.indexImageShowed = this.indexImageShowed === this.images.length ? this.indexImageShowed - 1 : this.indexImageShowed;
@@ -58,13 +76,29 @@ export class ModalComponent {
         }
         this.deleteImage.emit(imageToDelete);
     }
+    findCloserIndexAvailable(images) {
+        let closerIndex = this.indexImageShowed;
+        while ((!images[closerIndex]) && (closerIndex !== 0)) {
+            closerIndex--;
+        }
+        return closerIndex;
+    }
+    customActionEmit(action) {
+        const index = this.imagesLink.find(url => url === this.images[this.indexImageShowed].url);
+        this.customActionFired.emit(Object.assign({}, action, { imageIndex: index }));
+    }
     generateActionsListButton() {
-        return (h("div", { class: "afelio__gallery__actions__list-container" },
-            h("button", { class: "afelio__gallery__more__actions", onClick: this.showActionsList.bind(this) }),
-            this.showActions &&
-                h("ul", { class: "afelio__gallery__more__actions" }, this.actions.map((action) => {
-                    return (h("li", null, action.name));
-                }))));
+        if (this.galleryOptions.actions && this.galleryOptions.actions.length > 0) {
+            return (h("div", { class: "afelio__gallery__actions__list-container" },
+                h("button", { class: "afelio__gallery__header__btn afelio__gallery__more__actions__btn", style: { 'background-image': `url('${this.galleryOptions.moreActionsIconUrl}')` }, onClick: this.showActionsList.bind(this) }),
+                this.showActions &&
+                    h("ul", { class: "afelio__gallery__more__actions__list" }, this.galleryOptions.actions.map((action) => {
+                        return (h("li", { class: "afelio__gallery__more__actions__item", onClick: () => this.customActionEmit(action) },
+                            h("button", null,
+                                action.icon && h("span", { class: "afelio__gallery__header__btn btn__more-action-icon", style: { 'background-image': `url('${action.icon}')` } }),
+                                action.name)));
+                    }))));
+        }
     }
     showActionsList() {
         this.showActions = !this.showActions;
@@ -72,17 +106,17 @@ export class ModalComponent {
     render() {
         return (h("div", { class: "afelio__gallery__modal", onClick: (event) => this.handleClickModal(event) },
             h("div", { class: "afelio__gallery__header" },
-                this.enableRotate && h("button", { class: "afelio__gallery__header__btn afelio__gallery__btn__rotate", style: { 'background-image': `url('${this.rotateIconUrl}')` }, onClick: this.rotate.bind(this) }),
-                this.enableDelete && h("button", { class: "afelio__gallery__header__btn afelio__gallery__btn__delete", style: { 'background-image': `url('${this.deleteIconUrl}')` }, onClick: this.delete.bind(this) }),
-                h("button", { class: "afelio__gallery__header__btn afelio__gallery__btn__close", style: { 'background-image': `url('${this.closeIconUrl}')` }, onClick: this.close.bind(this) }),
-                this.actions.length > 0 && this.generateActionsListButton()),
+                this.galleryOptions.enableRotate && h("button", { class: "afelio__gallery__header__btn afelio__gallery__btn__rotate", style: { 'background-image': `url('${this.galleryOptions.rotateIconUrl}')` }, onClick: this.rotate.bind(this) }),
+                this.galleryOptions.enableDelete && h("button", { class: "afelio__gallery__header__btn afelio__gallery__btn__delete", style: { 'background-image': `url('${this.galleryOptions.deleteIconUrl}')` }, onClick: this.delete.bind(this) }),
+                h("button", { class: "afelio__gallery__header__btn afelio__gallery__btn__close", style: { 'background-image': `url('${this.galleryOptions.closeIconUrl}')` }, onClick: this.close.bind(this) }),
+                this.generateActionsListButton()),
             h("div", { class: "afelio__gallery__modal__content", ref: (el) => this.modalContent = el }, this.images.map((img, index) => {
                 if (img === this.images[this.indexImageShowed]) {
                     return (h("img", { key: index, src: this.images[this.indexImageShowed].url, style: { 'transform': `rotate(${this.currentRotation}deg)` } }));
                 }
             })),
-            this.indexImageShowed !== 0 && h("button", { class: "afelio__gallery__btn__previous", style: { 'background-image': `url('${this.previousIconUrl}')` }, onClick: this.previous.bind(this) }),
-            this.indexImageShowed !== this.images.length - 1 && h("button", { class: "afelio__gallery__btn__next", style: { 'background-image': `url('${this.nextIconUrl}')` }, onClick: this.next.bind(this) })));
+            this.indexImageShowed !== 0 && h("button", { class: "afelio__gallery__btn__previous", style: { 'background-image': `url('${this.galleryOptions.previousIconUrl}')` }, onClick: this.previous.bind(this) }),
+            this.indexImageShowed !== this.images.length - 1 && h("button", { class: "afelio__gallery__btn__next", style: { 'background-image': `url('${this.galleryOptions.nextIconUrl}')` }, onClick: this.next.bind(this) })));
     }
     static get is() { return "modal-component"; }
     static get originalStyleUrls() { return {
@@ -92,159 +126,6 @@ export class ModalComponent {
         "$": ["modal-component.css"]
     }; }
     static get properties() { return {
-        "enableDelete": {
-            "type": "boolean",
-            "mutable": false,
-            "complexType": {
-                "original": "boolean",
-                "resolved": "boolean",
-                "references": {}
-            },
-            "required": false,
-            "optional": false,
-            "docs": {
-                "tags": [],
-                "text": ""
-            },
-            "attribute": "enable-delete",
-            "reflect": false
-        },
-        "enableVisualDelete": {
-            "type": "boolean",
-            "mutable": false,
-            "complexType": {
-                "original": "boolean",
-                "resolved": "boolean",
-                "references": {}
-            },
-            "required": false,
-            "optional": false,
-            "docs": {
-                "tags": [],
-                "text": ""
-            },
-            "attribute": "enable-visual-delete",
-            "reflect": false
-        },
-        "enableRotate": {
-            "type": "boolean",
-            "mutable": false,
-            "complexType": {
-                "original": "boolean",
-                "resolved": "boolean",
-                "references": {}
-            },
-            "required": false,
-            "optional": false,
-            "docs": {
-                "tags": [],
-                "text": ""
-            },
-            "attribute": "enable-rotate",
-            "reflect": false
-        },
-        "enableBackdropClickClose": {
-            "type": "boolean",
-            "mutable": false,
-            "complexType": {
-                "original": "boolean",
-                "resolved": "boolean",
-                "references": {}
-            },
-            "required": false,
-            "optional": false,
-            "docs": {
-                "tags": [],
-                "text": ""
-            },
-            "attribute": "enable-backdrop-click-close",
-            "reflect": false
-        },
-        "previousIconUrl": {
-            "type": "string",
-            "mutable": false,
-            "complexType": {
-                "original": "string",
-                "resolved": "string",
-                "references": {}
-            },
-            "required": false,
-            "optional": false,
-            "docs": {
-                "tags": [],
-                "text": ""
-            },
-            "attribute": "previous-icon-url",
-            "reflect": false
-        },
-        "nextIconUrl": {
-            "type": "string",
-            "mutable": false,
-            "complexType": {
-                "original": "string",
-                "resolved": "string",
-                "references": {}
-            },
-            "required": false,
-            "optional": false,
-            "docs": {
-                "tags": [],
-                "text": ""
-            },
-            "attribute": "next-icon-url",
-            "reflect": false
-        },
-        "rotateIconUrl": {
-            "type": "string",
-            "mutable": false,
-            "complexType": {
-                "original": "string",
-                "resolved": "string",
-                "references": {}
-            },
-            "required": false,
-            "optional": false,
-            "docs": {
-                "tags": [],
-                "text": ""
-            },
-            "attribute": "rotate-icon-url",
-            "reflect": false
-        },
-        "closeIconUrl": {
-            "type": "string",
-            "mutable": false,
-            "complexType": {
-                "original": "string",
-                "resolved": "string",
-                "references": {}
-            },
-            "required": false,
-            "optional": false,
-            "docs": {
-                "tags": [],
-                "text": ""
-            },
-            "attribute": "close-icon-url",
-            "reflect": false
-        },
-        "deleteIconUrl": {
-            "type": "string",
-            "mutable": false,
-            "complexType": {
-                "original": "string",
-                "resolved": "string",
-                "references": {}
-            },
-            "required": false,
-            "optional": false,
-            "docs": {
-                "tags": [],
-                "text": ""
-            },
-            "attribute": "delete-icon-url",
-            "reflect": false
-        },
         "imagesLink": {
             "type": "unknown",
             "mutable": false,
@@ -277,16 +158,16 @@ export class ModalComponent {
             "attribute": "index-image-showed",
             "reflect": false
         },
-        "actions": {
+        "galleryOptions": {
             "type": "unknown",
             "mutable": false,
             "complexType": {
-                "original": "Action[]",
-                "resolved": "Action[]",
+                "original": "AfelioGalleryOptions",
+                "resolved": "AfelioGalleryOptions",
                 "references": {
-                    "Action": {
+                    "AfelioGalleryOptions": {
                         "location": "import",
-                        "path": "../../models/action.model"
+                        "path": "../../utils/interface/afelio-gallery-options.interface"
                     }
                 }
             },
@@ -318,10 +199,32 @@ export class ModalComponent {
                 "resolved": "any",
                 "references": {}
             }
+        }, {
+            "method": "customActionFired",
+            "name": "customActionFired",
+            "bubbles": true,
+            "cancelable": true,
+            "composed": true,
+            "docs": {
+                "tags": [],
+                "text": ""
+            },
+            "complexType": {
+                "original": "any",
+                "resolved": "any",
+                "references": {}
+            }
         }]; }
     static get elementRef() { return "modal"; }
     static get watchers() { return [{
             "propName": "imagesLink",
             "methodName": "changeImages"
+        }]; }
+    static get listeners() { return [{
+            "name": "keydown",
+            "method": "handleKeyDown",
+            "target": "document",
+            "capture": false,
+            "passive": false
         }]; }
 }

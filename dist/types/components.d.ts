@@ -7,36 +7,18 @@
 
 import { HTMLStencilElement, JSXBase } from './stencil.core';
 import {
-  Action,
-} from './models/action.model';
+  AfelioGalleryOptions,
+} from './utils/interface/afelio-gallery-options.interface';
 
 export namespace Components {
   interface AfelioGallery {
-    'actions': Action[];
-    'closeIconUrl': string;
-    'deleteIconUrl': string;
-    'enableBackdropClickClose': boolean;
-    'enableDelete': boolean;
-    'enableRotate': boolean;
-    'enableVisualDelete': boolean;
+    'galleryOptions': AfelioGalleryOptions;
     'images': string[];
-    'nextIconUrl': string;
-    'previousIconUrl': string;
-    'rotateIconUrl': string;
   }
   interface ModalComponent {
-    'actions': Action[];
-    'closeIconUrl': string;
-    'deleteIconUrl': string;
-    'enableBackdropClickClose': boolean;
-    'enableDelete': boolean;
-    'enableRotate': boolean;
-    'enableVisualDelete': boolean;
+    'galleryOptions': AfelioGalleryOptions;
     'imagesLink': string[];
     'indexImageShowed': number;
-    'nextIconUrl': string;
-    'previousIconUrl': string;
-    'rotateIconUrl': string;
   }
 }
 
@@ -62,32 +44,17 @@ declare global {
 
 declare namespace LocalJSX {
   interface AfelioGallery extends JSXBase.HTMLAttributes<HTMLAfelioGalleryElement> {
-    'actions'?: Action[];
-    'closeIconUrl'?: string;
-    'deleteIconUrl'?: string;
-    'enableBackdropClickClose'?: boolean;
-    'enableDelete'?: boolean;
-    'enableRotate'?: boolean;
-    'enableVisualDelete'?: boolean;
+    'galleryOptions'?: AfelioGalleryOptions;
     'images'?: string[];
-    'nextIconUrl'?: string;
-    'previousIconUrl'?: string;
-    'rotateIconUrl'?: string;
+    'onCustomActionFired'?: (event: CustomEvent<any>) => void;
+    'onDeleteImage'?: (event: CustomEvent<any>) => void;
   }
   interface ModalComponent extends JSXBase.HTMLAttributes<HTMLModalComponentElement> {
-    'actions'?: Action[];
-    'closeIconUrl'?: string;
-    'deleteIconUrl'?: string;
-    'enableBackdropClickClose'?: boolean;
-    'enableDelete'?: boolean;
-    'enableRotate'?: boolean;
-    'enableVisualDelete'?: boolean;
+    'galleryOptions'?: AfelioGalleryOptions;
     'imagesLink'?: string[];
     'indexImageShowed'?: number;
-    'nextIconUrl'?: string;
+    'onCustomActionFired'?: (event: CustomEvent<any>) => void;
     'onDeleteImage'?: (event: CustomEvent<any>) => void;
-    'previousIconUrl'?: string;
-    'rotateIconUrl'?: string;
   }
 
   interface IntrinsicElements {

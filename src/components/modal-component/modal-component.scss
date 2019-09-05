@@ -10,6 +10,13 @@
 		top: 10px;
 		right: 10px;
 
+		display: flex;
+
+		&:first-child
+		{
+			margin-left: 0;
+		}
+
 		.afelio__gallery__header__btn {
 			position: relative;
 			width: 30px;
@@ -20,6 +27,44 @@
 			border: none;
 			background: transparent;
 			appearance: none;
+		}
+
+		.afelio__gallery__actions__list-container
+		{
+			position: relative;
+
+			.afelio__gallery__more__actions__list
+			{
+				position: absolute;
+				right: 0;
+
+				list-style-type: none;
+				.afelio__gallery__more__actions__item
+				{
+					button
+					{
+						margin: 0;
+						display: flex;
+						align-items: center;
+
+						border: none;
+						background: transparent;
+						background-repeat: no-repeat;
+						background-position: center center;
+						appearance: none;
+						outline: none;
+
+						cursor: pointer;
+
+						.btn__more-action-icon
+						{
+							display: block;
+							margin-right: 8px;
+						}
+					}
+				}
+			}
+
 		}
 	}
 	.afelio__gallery__modal__content {
@@ -38,7 +83,7 @@
 		}
 	}
 
-	.afelio__gallery__btn__rotate, .afelio__gallery__btn__delete, .afelio__gallery__btn__previous, .afelio__gallery__btn__next, .afelio__gallery__btn__close {
+	.afelio__gallery__btn__rotate, .btn__more-action-icon, .afelio__gallery__more__actions__btn, .afelio__gallery__btn__delete, .afelio__gallery__btn__previous, .afelio__gallery__btn__next, .afelio__gallery__btn__close {
 		background-color: transparent;;
 		background-position: center center;
 		background-repeat: no-repeat;

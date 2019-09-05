@@ -9,6 +9,16 @@ const plt = {
     ael: (el, eventName, listener, opts) => el.addEventListener(eventName, listener, opts),
     rel: (el, eventName, listener, opts) => el.removeEventListener(eventName, listener, opts),
 };
+const supportsListenerOptions = /*@__PURE__*/ (() => {
+    let supportsListenerOptions = false;
+    try {
+        doc.addEventListener('e', null, Object.defineProperty({}, 'passive', {
+            get() { supportsListenerOptions = true; }
+        }));
+    }
+    catch (e) { }
+    return supportsListenerOptions;
+})();
 const supportsConstructibleStylesheets = (() => {
     try {
         new CSSStyleSheet();
@@ -867,6 +877,12 @@ const postUpdateComponent = (elm, hostRef, ancestorsActivelyLoadingChildren) => 
 const disconnectedCallback = (elm) => {
     if ((plt.$flags$ & 1 /* isTmpDisconnected */) === 0) {
         const hostRef = getHostRef(elm);
+        {
+            if (hostRef.$rmListeners$) {
+                hostRef.$rmListeners$();
+                hostRef.$rmListeners$ = undefined;
+            }
+        }
         // clear CSS var-shim tracking
         if (cssVarShim) {
             cssVarShim.removeHost(elm);
@@ -878,19 +894,9 @@ const disconnectedCallback = (elm) => {
 const parsePropertyValue = (propValue, propType) => {
     // ensure this value is of the correct prop type
     if (propValue != null && !isComplexType(propValue)) {
-        if (propType & 4 /* Boolean */) {
-            // per the HTML spec, any string value means it is a boolean true value
-            // but we'll cheat here and say that the string "false" is the boolean false
-            return (propValue === 'false' ? false : propValue === '' || !!propValue);
-        }
         if (propType & 2 /* Number */) {
             // force it to be a number
             return parseFloat(propValue);
-        }
-        if (propType & 1 /* String */) {
-            // could have been passed as a number or boolean
-            // but we still want it as a string
-            return String(propValue);
         }
         // redundant return here for better minification
         return propValue;
@@ -990,6 +996,41 @@ const proxyComponent = (Cstr, cmpMeta, flags) => {
     return Cstr;
 };
 
+const addEventListeners = (elm, hostRef, listeners) => {
+    const removeFns = listeners.map(([flags, name, method]) => {
+        const target = (getHostListenerTarget(elm, flags));
+        const handler = hostListenerProxy(hostRef, method);
+        const opts = hostListenerOpts(flags);
+        plt.ael(target, name, handler, opts);
+        return () => plt.rel(target, name, handler, opts);
+    });
+    return () => removeFns.forEach(fn => fn());
+};
+const hostListenerProxy = (hostRef, methodName) => {
+    return (ev) => {
+        {
+            if (hostRef.$lazyInstance$) {
+                // instance is ready, let's call it's member method for this event
+                return hostRef.$lazyInstance$[methodName](ev);
+            }
+            else {
+                return hostRef.$onReadyPromise$.then(() => hostRef.$lazyInstance$[methodName](ev)).catch(consoleError);
+            }
+        }
+    };
+};
+const getHostListenerTarget = (elm, flags) => {
+    if (flags & 4 /* TargetDocument */)
+        return doc;
+    return elm;
+};
+const hostListenerOpts = (flags) => supportsListenerOptions ?
+    {
+        'passive': (flags & 1 /* Passive */) !== 0,
+        'capture': (flags & 2 /* Capture */) !== 0,
+    }
+    : (flags & 2 /* Capture */) !== 0;
+
 const initializeComponent = async (elm, hostRef, cmpMeta, hmrVersionId, Cstr) => {
     // initializeComponent
     if ((hostRef.$flags$ & 256 /* hasInitializedComponent */) === 0) {
@@ -1062,6 +1103,12 @@ const connectedCallback = (elm, cmpMeta) => {
     if ((plt.$flags$ & 1 /* isTmpDisconnected */) === 0) {
         // connectedCallback
         const hostRef = getHostRef(elm);
+        if (cmpMeta.$listeners$) {
+            // initialize our event listeners on the host element
+            // we do this now so that we can listening to events that may
+            // have fired even before the instance is ready
+            hostRef.$rmListeners$ = addEventListeners(elm, hostRef, cmpMeta.$listeners$);
+        }
         if (!(hostRef.$flags$ & 1 /* hasConnected */)) {
             // first time this component has connected
             hostRef.$flags$ |= 1 /* hasConnected */;

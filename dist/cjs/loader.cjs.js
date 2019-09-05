@@ -2,11 +2,11 @@
 
 Object.defineProperty(exports, '__esModule', { value: true });
 
-const __chunk_1 = require('./chunk-f7efe363.js');
+const __chunk_1 = require('./chunk-1b2bb3ec.js');
 
 const defineCustomElements = (win, options) => {
   return __chunk_1.patchEsm().then(() => {
-    __chunk_1.bootstrapLazy([["afelio-gallery_2.cjs",[[0,"afelio-gallery",{"images":[16],"previousIconUrl":[1,"previous-icon-url"],"nextIconUrl":[1,"next-icon-url"],"rotateIconUrl":[1,"rotate-icon-url"],"closeIconUrl":[1,"close-icon-url"],"deleteIconUrl":[1,"delete-icon-url"],"enableDelete":[4,"enable-delete"],"enableVisualDelete":[4,"enable-visual-delete"],"enableRotate":[4,"enable-rotate"],"enableBackdropClickClose":[4,"enable-backdrop-click-close"],"actions":[16]}],[0,"modal-component",{"enableDelete":[4,"enable-delete"],"enableVisualDelete":[4,"enable-visual-delete"],"enableRotate":[4,"enable-rotate"],"enableBackdropClickClose":[4,"enable-backdrop-click-close"],"previousIconUrl":[1,"previous-icon-url"],"nextIconUrl":[1,"next-icon-url"],"rotateIconUrl":[1,"rotate-icon-url"],"closeIconUrl":[1,"close-icon-url"],"deleteIconUrl":[1,"delete-icon-url"],"imagesLink":[16],"indexImageShowed":[2,"index-image-showed"],"actions":[16],"currentRotation":[32],"showActions":[32],"images":[32]}]]]], options);
+    __chunk_1.bootstrapLazy([["afelio-gallery_2.cjs",[[0,"afelio-gallery",{"images":[16],"galleryOptions":[16]}],[0,"modal-component",{"imagesLink":[16],"indexImageShowed":[2,"index-image-showed"],"galleryOptions":[16],"currentRotation":[32],"showActions":[32],"images":[32]},[[4,"keydown","handleKeyDown"]]]]]], options);
   });
 };
 
