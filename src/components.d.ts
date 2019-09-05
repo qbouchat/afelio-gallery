@@ -6,27 +6,19 @@
 
 
 import { HTMLStencilElement, JSXBase } from '@stencil/core/internal';
-
+import {
+  AfelioGalleryOptions,
+} from './utils/interface/afelio-gallery-options.interface';
 
 export namespace Components {
   interface AfelioGallery {
-    'backropClickClose': boolean;
-    'closeIconUrl': string;
-    'enableRotate': boolean;
+    'galleryOptions': AfelioGalleryOptions;
     'images': string[];
-    'nextIconUrl': string;
-    'previousIconUrl': string;
-    'rotateIconUrl': string;
   }
   interface ModalComponent {
-    'backropClickClose': boolean;
-    'closeIconUrl': string;
-    'enableRotate': boolean;
+    'galleryOptions': AfelioGalleryOptions;
     'imagesLink': string[];
     'indexImageShowed': number;
-    'nextIconUrl': string;
-    'previousIconUrl': string;
-    'rotateIconUrl': string;
   }
 }
 
@@ -52,23 +44,17 @@ declare global {
 
 declare namespace LocalJSX {
   interface AfelioGallery extends JSXBase.HTMLAttributes<HTMLAfelioGalleryElement> {
-    'backropClickClose'?: boolean;
-    'closeIconUrl'?: string;
-    'enableRotate'?: boolean;
+    'galleryOptions'?: AfelioGalleryOptions;
     'images'?: string[];
-    'nextIconUrl'?: string;
-    'previousIconUrl'?: string;
-    'rotateIconUrl'?: string;
+    'onCustomActionFired'?: (event: CustomEvent<any>) => void;
+    'onDeleteImage'?: (event: CustomEvent<any>) => void;
   }
   interface ModalComponent extends JSXBase.HTMLAttributes<HTMLModalComponentElement> {
-    'backropClickClose'?: boolean;
-    'closeIconUrl'?: string;
-    'enableRotate'?: boolean;
+    'galleryOptions'?: AfelioGalleryOptions;
     'imagesLink'?: string[];
     'indexImageShowed'?: number;
-    'nextIconUrl'?: string;
-    'previousIconUrl'?: string;
-    'rotateIconUrl'?: string;
+    'onCustomActionFired'?: (event: CustomEvent<any>) => void;
+    'onDeleteImage'?: (event: CustomEvent<any>) => void;
   }
 
   interface IntrinsicElements {

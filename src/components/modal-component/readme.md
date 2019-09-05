@@ -7,16 +7,19 @@
 
 ## Properties
 
-| Property            | Attribute             | Description | Type       | Default     |
-| ------------------- | --------------------- | ----------- | ---------- | ----------- |
-| `backropClickClose` | `backrop-click-close` |             | `boolean`  | `undefined` |
-| `closeIconUrl`      | `close-icon-url`      |             | `string`   | `undefined` |
-| `enableRotate`      | `enable-rotate`       |             | `boolean`  | `undefined` |
-| `imagesLink`        | --                    |             | `string[]` | `undefined` |
-| `indexImageShowed`  | `index-image-showed`  |             | `number`   | `undefined` |
-| `nextIconUrl`       | `next-icon-url`       |             | `string`   | `undefined` |
-| `previousIconUrl`   | `previous-icon-url`   |             | `string`   | `undefined` |
-| `rotateIconUrl`     | `rotate-icon-url`     |             | `string`   | `undefined` |
+| Property           | Attribute            | Description | Type                   | Default     |
+| ------------------ | -------------------- | ----------- | ---------------------- | ----------- |
+| `galleryOptions`   | --                   |             | `AfelioGalleryOptions` | `undefined` |
+| `imagesLink`       | --                   |             | `string[]`             | `undefined` |
+| `indexImageShowed` | `index-image-showed` |             | `number`               | `undefined` |
+
+
+## Events
+
+| Event               | Description | Type               |
+| ------------------- | ----------- | ------------------ |
+| `customActionFired` |             | `CustomEvent<any>` |
+| `deleteImage`       |             | `CustomEvent<any>` |
 
 
 ## Dependencies

@@ -9,6 +9,16 @@ const plt = {
     ael: (el, eventName, listener, opts) => el.addEventListener(eventName, listener, opts),
     rel: (el, eventName, listener, opts) => el.removeEventListener(eventName, listener, opts),
 };
+const supportsListenerOptions = /*@__PURE__*/ (() => {
+    let supportsListenerOptions = false;
+    try {
+        doc.addEventListener('e', null, Object.defineProperty({}, 'passive', {
+            get() { supportsListenerOptions = true; }
+        }));
+    }
+    catch (e) { }
+    return supportsListenerOptions;
+})();
 const supportsConstructibleStylesheets = (() => {
     try {
         new CSSStyleSheet();
@@ -867,6 +877,12 @@ const postUpdateComponent = (elm, hostRef, ancestorsActivelyLoadingChildren) => 
 const disconnectedCallback = (elm) => {
     if ((plt.$flags$ & 1 /* isTmpDisconnected */) === 0) {
         const hostRef = getHostRef(elm);
+        {
+            if (hostRef.$rmListeners$) {
+                hostRef.$rmListeners$();
+                hostRef.$rmListeners$ = undefined;
+            }
+        }
         // clear CSS var-shim tracking
         if (cssVarShim) {
             cssVarShim.removeHost(elm);
@@ -878,19 +894,9 @@ const disconnectedCallback = (elm) => {
 const parsePropertyValue = (propValue, propType) => {
     // ensure this value is of the correct prop type
     if (propValue != null && !isComplexType(propValue)) {
-        if (propType & 4 /* Boolean */) {
-            // per the HTML spec, any string value means it is a boolean true value
-            // but we'll cheat here and say that the string "false" is the boolean false
-            return (propValue === 'false' ? false : propValue === '' || !!propValue);
-        }
         if (propType & 2 /* Number */) {
             // force it to be a number
             return parseFloat(propValue);
-        }
-        if (propType & 1 /* String */) {
-            // could have been passed as a number or boolean
-            // but we still want it as a string
-            return String(propValue);
         }
         // redundant return here for better minification
         return propValue;
@@ -913,6 +919,23 @@ const setValue = (ref, propName, newVal, cmpMeta) => {
         // set our new value!
         hostRef.$instanceValues$.set(propName, newVal);
         if (hostRef.$lazyInstance$) {
+            // get an array of method names of watch functions to call
+            if (cmpMeta.$watchers$ &&
+                (flags & (1 /* hasConnected */ | 8 /* isConstructingInstance */)) === 1 /* hasConnected */) {
+                const watchMethods = cmpMeta.$watchers$[propName];
+                if (watchMethods) {
+                    // this instance is watching for when this property changed
+                    watchMethods.forEach(watchMethodName => {
+                        try {
+                            // fire off each of the watch methods that are watching this property
+                            (hostRef.$lazyInstance$)[watchMethodName].call((hostRef.$lazyInstance$), newVal, oldVal, propName);
+                        }
+                        catch (e) {
+                            consoleError(e);
+                        }
+                    });
+                }
+            }
             if ((flags & (4 /* isActiveRender */ | 2 /* hasRendered */ | 16 /* isQueuedForUpdate */)) === 2 /* hasRendered */) {
                 // looks like this value actually changed, so we've got work to do!
                 // but only if we've already rendered, otherwise just chill out
@@ -926,6 +949,9 @@ const setValue = (ref, propName, newVal, cmpMeta) => {
 
 const proxyComponent = (Cstr, cmpMeta, flags) => {
     if (cmpMeta.$members$) {
+        if (Cstr.watchers) {
+            cmpMeta.$watchers$ = Cstr.watchers;
+        }
         // It's better to have a const than two Object.entries()
         const members = Object.entries(cmpMeta.$members$);
         const prototype = Cstr.prototype;
@@ -970,6 +996,41 @@ const proxyComponent = (Cstr, cmpMeta, flags) => {
     return Cstr;
 };
 
+const addEventListeners = (elm, hostRef, listeners) => {
+    const removeFns = listeners.map(([flags, name, method]) => {
+        const target = (getHostListenerTarget(elm, flags));
+        const handler = hostListenerProxy(hostRef, method);
+        const opts = hostListenerOpts(flags);
+        plt.ael(target, name, handler, opts);
+        return () => plt.rel(target, name, handler, opts);
+    });
+    return () => removeFns.forEach(fn => fn());
+};
+const hostListenerProxy = (hostRef, methodName) => {
+    return (ev) => {
+        {
+            if (hostRef.$lazyInstance$) {
+                // instance is ready, let's call it's member method for this event
+                return hostRef.$lazyInstance$[methodName](ev);
+            }
+            else {
+                return hostRef.$onReadyPromise$.then(() => hostRef.$lazyInstance$[methodName](ev)).catch(consoleError);
+            }
+        }
+    };
+};
+const getHostListenerTarget = (elm, flags) => {
+    if (flags & 4 /* TargetDocument */)
+        return doc;
+    return elm;
+};
+const hostListenerOpts = (flags) => supportsListenerOptions ?
+    {
+        'passive': (flags & 1 /* Passive */) !== 0,
+        'capture': (flags & 2 /* Capture */) !== 0,
+    }
+    : (flags & 2 /* Capture */) !== 0;
+
 const initializeComponent = async (elm, hostRef, cmpMeta, hmrVersionId, Cstr) => {
     // initializeComponent
     if ((hostRef.$flags$ & 256 /* hasInitializedComponent */) === 0) {
@@ -981,6 +1042,12 @@ const initializeComponent = async (elm, hostRef, cmpMeta, hmrVersionId, Cstr) =>
             // wired up with the host element
             Cstr = await loadModule(cmpMeta);
             if (!Cstr.isProxied) {
+                // we'eve never proxied this Constructor before
+                // let's add the getters/setters to its prototype before
+                // the first time we create an instance of the implementation
+                {
+                    cmpMeta.$watchers$ = Cstr.watchers;
+                }
                 proxyComponent(Cstr, cmpMeta, 2 /* proxyState */);
                 Cstr.isProxied = true;
             }
@@ -1036,6 +1103,12 @@ const connectedCallback = (elm, cmpMeta) => {
     if ((plt.$flags$ & 1 /* isTmpDisconnected */) === 0) {
         // connectedCallback
         const hostRef = getHostRef(elm);
+        if (cmpMeta.$listeners$) {
+            // initialize our event listeners on the host element
+            // we do this now so that we can listening to events that may
+            // have fired even before the instance is ready
+            hostRef.$rmListeners$ = addEventListeners(elm, hostRef, cmpMeta.$listeners$);
+        }
         if (!(hostRef.$flags$ & 1 /* hasConnected */)) {
             // first time this component has connected
             hostRef.$flags$ |= 1 /* hasConnected */;
@@ -1095,6 +1168,9 @@ const bootstrapLazy = (lazyBundles, options = {}) => {
             $members$: compactMeta[2],
             $listeners$: compactMeta[3],
         };
+        {
+            cmpMeta.$watchers$ = {};
+        }
         const tagName = cmpMeta.$tagName$;
         const HostElement = class extends HTMLElement {
             // StencilLazyHost
@@ -1144,6 +1220,18 @@ const bootstrapLazy = (lazyBundles, options = {}) => {
     head.insertBefore(visibilityStyle, y ? y.nextSibling : head.firstChild);
 };
 
+const createEvent = (ref, name, flags) => {
+    const elm = getElement(ref);
+    return {
+        emit: (detail) => elm.dispatchEvent(new (CustomEvent)(name, {
+            bubbles: !!(flags & 4 /* Bubbles */),
+            composed: !!(flags & 2 /* Composed */),
+            cancelable: !!(flags & 1 /* Cancellable */),
+            detail
+        }))
+    };
+};
+
 const getElement = (ref) => getHostRef(ref).$hostElement$;
 
-export { patchEsm as a, bootstrapLazy as b, getElement as g, h, patchBrowser as p, registerInstance as r };
+export { patchEsm as a, bootstrapLazy as b, createEvent as c, getElement as g, h, patchBrowser as p, registerInstance as r };
