@@ -39,6 +39,8 @@
   align-items: center;
   border: none;
   background: transparent;
+  background-repeat: no-repeat;
+  background-position: center center;
   appearance: none;
   outline: none;
   cursor: pointer;
