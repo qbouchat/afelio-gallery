@@ -12,6 +12,7 @@ export interface AfelioGalleryOptions {
 	rotateIconUrl?: string;
 	closeIconUrl?: string;
 	deleteIconUrl?: string;
+	moreActionsIconUrl?: string;
 
 	///////
 	//

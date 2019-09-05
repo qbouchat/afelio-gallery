@@ -5,6 +5,7 @@ export interface AfelioGalleryOptions {
     rotateIconUrl?: string;
     closeIconUrl?: string;
     deleteIconUrl?: string;
+    moreActionsIconUrl?: string;
     enableDelete?: boolean;
     enableVisualDelete?: boolean;
     enableRotate?: boolean;

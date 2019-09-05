@@ -1,6 +1,7 @@
 import { Component, h, Prop, Element, State, Watch, Event, EventEmitter, Listen } from '@stencil/core';
 import { Image } from '../../models/images.model';
 import { AfelioGalleryOptions } from '../../utils/interface/afelio-gallery-options.interface';
+import { Action } from '../../models/action.model';
 
 
 @Component({
@@ -14,6 +15,7 @@ export class ModalComponent {
 	modalContent: HTMLElement
 
 	@Event() deleteImage: EventEmitter;
+	@Event() customActionFired: EventEmitter;
 
 	@Prop() imagesLink: string[];
 	@Prop() indexImageShowed: number;
@@ -25,8 +27,7 @@ export class ModalComponent {
 	@State() images: Image[];
 
 	@Watch('imagesLink')
-	changeImages(newImages: string[], oldImages: string[]) {
-		console.log(newImages, oldImages);
+	changeImages(newImages: string[]) {
 		this.indexImageShowed = this.findCloserIndexAvailable(newImages) ;
 		this.images = newImages.map((img) => new Image(img));
 	}
@@ -45,6 +46,7 @@ export class ModalComponent {
 					this.previous();
 				}
 				break;
+
 			case 'Escape':
 				this.close();
 				break;
@@ -117,16 +119,26 @@ export class ModalComponent {
 		return closerIndex;
 	}
 
+	private customActionEmit(action: Action) {
+		const index = this.imagesLink.find(url => url === this.images[this.indexImageShowed].url);
+		this.customActionFired.emit({...action, imageIndex: index });
+	}
+
 	private generateActionsListButton() {
 		if (this.galleryOptions.actions && this.galleryOptions.actions.length > 0) {
 			return (
 				<div class="afelio__gallery__actions__list-container">
-					<button class="afelio__gallery__more__actions" onClick={this.showActionsList.bind(this)}></button>
+					<button class="afelio__gallery__header__btn afelio__gallery__more__actions__btn" style={{'background-image': `url('${this.galleryOptions.moreActionsIconUrl}')`}} onClick={this.showActionsList.bind(this)}></button>
 					{this.showActions &&
-						<ul class="afelio__gallery__more__actions">
+						<ul class="afelio__gallery__more__actions__list">
 							{
 							this.galleryOptions.actions.map((action) => {
-								return (<li>{action.name}</li>);
+								return (<li class="afelio__gallery__more__actions__item" onClick={() => this.customActionEmit(action)}>
+										<button>
+										{action.icon && <span class="afelio__gallery__header__btn btn__more-action-icon" style={{'background-image': `url('${action.icon}')`}}></span>}
+										{action.name}
+										</button>
+									</li>);
 							})
 							}
 						</ul>

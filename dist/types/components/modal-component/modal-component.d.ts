@@ -5,13 +5,14 @@ export declare class ModalComponent {
     modal: HTMLElement;
     modalContent: HTMLElement;
     deleteImage: EventEmitter;
+    customActionFired: EventEmitter;
     imagesLink: string[];
     indexImageShowed: number;
     galleryOptions: AfelioGalleryOptions;
     currentRotation: number;
     showActions: boolean;
     images: Image[];
-    changeImages(newImages: string[], oldImages: string[]): void;
+    changeImages(newImages: string[]): void;
     handleKeyDown(ev: KeyboardEvent): void;
     componentWillLoad(): void;
     private previous;
@@ -21,6 +22,7 @@ export declare class ModalComponent {
     private rotate;
     private delete;
     private findCloserIndexAvailable;
+    private customActionEmit;
     private generateActionsListButton;
     private showActionsList;
     render(): any;

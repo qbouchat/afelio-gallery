@@ -46,12 +46,14 @@ declare namespace LocalJSX {
   interface AfelioGallery extends JSXBase.HTMLAttributes<HTMLAfelioGalleryElement> {
     'galleryOptions'?: AfelioGalleryOptions;
     'images'?: string[];
+    'onCustomActionFired'?: (event: CustomEvent<any>) => void;
     'onDeleteImage'?: (event: CustomEvent<any>) => void;
   }
   interface ModalComponent extends JSXBase.HTMLAttributes<HTMLModalComponentElement> {
     'galleryOptions'?: AfelioGalleryOptions;
     'imagesLink'?: string[];
     'indexImageShowed'?: number;
+    'onCustomActionFired'?: (event: CustomEvent<any>) => void;
     'onDeleteImage'?: (event: CustomEvent<any>) => void;
   }
 

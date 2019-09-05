@@ -10,6 +10,10 @@
   position: fixed;
   top: 10px;
   right: 10px;
+  display: flex;
+}
+.afelio__gallery__modal .afelio__gallery__header:first-child {
+  margin-left: 0;
 }
 .afelio__gallery__modal .afelio__gallery__header .afelio__gallery__header__btn {
   position: relative;
@@ -20,6 +24,28 @@
   border: none;
   background: transparent;
   appearance: none;
+}
+.afelio__gallery__modal .afelio__gallery__header .afelio__gallery__actions__list-container {
+  position: relative;
+}
+.afelio__gallery__modal .afelio__gallery__header .afelio__gallery__actions__list-container .afelio__gallery__more__actions__list {
+  position: absolute;
+  right: 0;
+  list-style-type: none;
+}
+.afelio__gallery__modal .afelio__gallery__header .afelio__gallery__actions__list-container .afelio__gallery__more__actions__list .afelio__gallery__more__actions__item button {
+  margin: 0;
+  display: flex;
+  align-items: center;
+  border: none;
+  background: transparent;
+  appearance: none;
+  outline: none;
+  cursor: pointer;
+}
+.afelio__gallery__modal .afelio__gallery__header .afelio__gallery__actions__list-container .afelio__gallery__more__actions__list .afelio__gallery__more__actions__item button .btn__more-action-icon {
+  display: block;
+  margin-right: 8px;
 }
 .afelio__gallery__modal .afelio__gallery__modal__content {
   display: flex;
@@ -37,7 +63,7 @@
   transform: rotate(0deg);
   transition: transform 0.3s ease-in-out;
 }
-.afelio__gallery__modal .afelio__gallery__btn__rotate, .afelio__gallery__modal .afelio__gallery__btn__delete, .afelio__gallery__modal .afelio__gallery__btn__previous, .afelio__gallery__modal .afelio__gallery__btn__next, .afelio__gallery__modal .afelio__gallery__btn__close {
+.afelio__gallery__modal .afelio__gallery__btn__rotate, .afelio__gallery__modal .btn__more-action-icon, .afelio__gallery__modal .afelio__gallery__more__actions__btn, .afelio__gallery__modal .afelio__gallery__btn__delete, .afelio__gallery__modal .afelio__gallery__btn__previous, .afelio__gallery__modal .afelio__gallery__btn__next, .afelio__gallery__modal .afelio__gallery__btn__close {
   background-color: transparent;
   background-position: center center;
   background-repeat: no-repeat;

@@ -16,9 +16,10 @@
 
 ## Events
 
-| Event         | Description | Type               |
-| ------------- | ----------- | ------------------ |
-| `deleteImage` |             | `CustomEvent<any>` |
+| Event               | Description | Type               |
+| ------------------- | ----------- | ------------------ |
+| `customActionFired` |             | `CustomEvent<any>` |
+| `deleteImage`       |             | `CustomEvent<any>` |
 
 
 ## Dependencies

@@ -4,8 +4,7 @@ export class ModalComponent {
     constructor() {
         this.showActions = false;
     }
-    changeImages(newImages, oldImages) {
-        console.log(newImages, oldImages);
+    changeImages(newImages) {
         this.indexImageShowed = this.findCloserIndexAvailable(newImages);
         this.images = newImages.map((img) => new Image(img));
     }
@@ -84,13 +83,20 @@ export class ModalComponent {
         }
         return closerIndex;
     }
+    customActionEmit(action) {
+        const index = this.imagesLink.find(url => url === this.images[this.indexImageShowed].url);
+        this.customActionFired.emit(Object.assign({}, action, { imageIndex: index }));
+    }
     generateActionsListButton() {
         if (this.galleryOptions.actions && this.galleryOptions.actions.length > 0) {
             return (h("div", { class: "afelio__gallery__actions__list-container" },
-                h("button", { class: "afelio__gallery__more__actions", onClick: this.showActionsList.bind(this) }),
+                h("button", { class: "afelio__gallery__header__btn afelio__gallery__more__actions__btn", style: { 'background-image': `url('${this.galleryOptions.moreActionsIconUrl}')` }, onClick: this.showActionsList.bind(this) }),
                 this.showActions &&
-                    h("ul", { class: "afelio__gallery__more__actions" }, this.galleryOptions.actions.map((action) => {
-                        return (h("li", null, action.name));
+                    h("ul", { class: "afelio__gallery__more__actions__list" }, this.galleryOptions.actions.map((action) => {
+                        return (h("li", { class: "afelio__gallery__more__actions__item", onClick: () => this.customActionEmit(action) },
+                            h("button", null,
+                                action.icon && h("span", { class: "afelio__gallery__header__btn btn__more-action-icon", style: { 'background-image': `url('${action.icon}')` } }),
+                                action.name)));
                     }))));
         }
     }
@@ -181,6 +187,21 @@ export class ModalComponent {
     static get events() { return [{
             "method": "deleteImage",
             "name": "deleteImage",
+            "bubbles": true,
+            "cancelable": true,
+            "composed": true,
+            "docs": {
+                "tags": [],
+                "text": ""
+            },
+            "complexType": {
+                "original": "any",
+                "resolved": "any",
+                "references": {}
+            }
+        }, {
+            "method": "customActionFired",
+            "name": "customActionFired",
             "bubbles": true,
             "cancelable": true,
             "composed": true,
