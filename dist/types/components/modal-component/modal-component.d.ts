@@ -11,7 +11,8 @@ export declare class ModalComponent {
     currentRotation: number;
     showActions: boolean;
     images: Image[];
-    changeImages(images: string[], oldImages: string[]): void;
+    changeImages(newImages: string[], oldImages: string[]): void;
+    handleKeyDown(ev: KeyboardEvent): void;
     componentWillLoad(): void;
     private previous;
     private next;
@@ -19,6 +20,7 @@ export declare class ModalComponent {
     private close;
     private rotate;
     private delete;
+    private findCloserIndexAvailable;
     private generateActionsListButton;
     private showActionsList;
     render(): any;

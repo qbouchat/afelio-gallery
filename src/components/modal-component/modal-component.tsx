@@ -1,4 +1,4 @@
-import { Component, h, Prop, Element, State, Watch, Event, EventEmitter } from '@stencil/core';
+import { Component, h, Prop, Element, State, Watch, Event, EventEmitter, Listen } from '@stencil/core';
 import { Image } from '../../models/images.model';
 import { AfelioGalleryOptions } from '../../utils/interface/afelio-gallery-options.interface';
 
@@ -25,10 +25,33 @@ export class ModalComponent {
 	@State() images: Image[];
 
 	@Watch('imagesLink')
-	changeImages(images: string[], oldImages: string[]) {
-		console.log(images, oldImages);
-		this.currentRotation = 0;
-		this.images = images.map((img) => new Image(img));
+	changeImages(newImages: string[], oldImages: string[]) {
+		console.log(newImages, oldImages);
+		this.indexImageShowed = this.findCloserIndexAvailable(newImages) ;
+		this.images = newImages.map((img) => new Image(img));
+	}
+
+	@Listen('keydown', {target: 'document'})
+	handleKeyDown(ev: KeyboardEvent){
+		switch (ev.key) {
+			case 'ArrowRight':
+				if (this.indexImageShowed < this.images.length -1) {
+					this.next();
+				}
+				break;
+
+			case 'ArrowLeft':
+				if (this.indexImageShowed > 0) {
+					this.previous();
+				}
+				break;
+			case 'Escape':
+				this.close();
+				break;
+
+			default:
+				break;
+		}
 	}
 
 	componentWillLoad() {
@@ -84,6 +107,14 @@ export class ModalComponent {
 			}
 		}
 		this.deleteImage.emit(imageToDelete);
+	}
+
+	private findCloserIndexAvailable(images: string[]): number {
+		let closerIndex = this.indexImageShowed;
+		while ((!images[closerIndex]) && (closerIndex !== 0)) {
+			closerIndex--;
+		}
+		return closerIndex;
 	}
 
 	private generateActionsListButton() {

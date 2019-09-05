@@ -4,10 +4,29 @@ export class ModalComponent {
     constructor() {
         this.showActions = false;
     }
-    changeImages(images, oldImages) {
-        console.log(images, oldImages);
-        this.currentRotation = 0;
-        this.images = images.map((img) => new Image(img));
+    changeImages(newImages, oldImages) {
+        console.log(newImages, oldImages);
+        this.indexImageShowed = this.findCloserIndexAvailable(newImages);
+        this.images = newImages.map((img) => new Image(img));
+    }
+    handleKeyDown(ev) {
+        switch (ev.key) {
+            case 'ArrowRight':
+                if (this.indexImageShowed < this.images.length - 1) {
+                    this.next();
+                }
+                break;
+            case 'ArrowLeft':
+                if (this.indexImageShowed > 0) {
+                    this.previous();
+                }
+                break;
+            case 'Escape':
+                this.close();
+                break;
+            default:
+                break;
+        }
     }
     componentWillLoad() {
         this.images = this.imagesLink.map((img) => new Image(img));
@@ -57,6 +76,13 @@ export class ModalComponent {
             }
         }
         this.deleteImage.emit(imageToDelete);
+    }
+    findCloserIndexAvailable(images) {
+        let closerIndex = this.indexImageShowed;
+        while ((!images[closerIndex]) && (closerIndex !== 0)) {
+            closerIndex--;
+        }
+        return closerIndex;
     }
     generateActionsListButton() {
         if (this.galleryOptions.actions && this.galleryOptions.actions.length > 0) {
@@ -172,5 +198,12 @@ export class ModalComponent {
     static get watchers() { return [{
             "propName": "imagesLink",
             "methodName": "changeImages"
+        }]; }
+    static get listeners() { return [{
+            "name": "keydown",
+            "method": "handleKeyDown",
+            "target": "document",
+            "capture": false,
+            "passive": false
         }]; }
 }

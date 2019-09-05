@@ -25,7 +25,7 @@
 
 ### Used by
 
- - [afelio-gallery](../afelio-gallery)
+ - [afelio-gallery](..\afelio-gallery)
 
 ### Graph
 ```mermaid

@@ -16,7 +16,13 @@ export class MyComponent {
             actions: []
         };
         // IMAGES ARRAY
-        this.images = [];
+        this.images = [
+            'https://mir-s3-cdn-cf.behance.net/project_modules/disp/f3ccfd16712237.562b038d23834.jpg',
+            'https://mir-s3-cdn-cf.behance.net/project_modules/disp/4744a716712237.562b033d7fea6.jpg',
+            'https://mir-s3-cdn-cf.behance.net/project_modules/max_1200/2cd83916611375.562aebbd4d825.jpg',
+            'https://mir-s3-cdn-cf.behance.net/project_modules/max_1200/4975fe16611375.562aebbda1128.jpg',
+            'https://mir-s3-cdn-cf.behance.net/project_modules/disp/211cfd16598783.562ae84b9b4b4.jpg'
+        ];
     }
     changeImages() {
         this.modal.imagesLink = this.images;
@@ -59,7 +65,7 @@ export class MyComponent {
                 "tags": [],
                 "text": ""
             },
-            "defaultValue": "[]"
+            "defaultValue": "[\n\t\t'https://mir-s3-cdn-cf.behance.net/project_modules/disp/f3ccfd16712237.562b038d23834.jpg',\n\t\t'https://mir-s3-cdn-cf.behance.net/project_modules/disp/4744a716712237.562b033d7fea6.jpg',\n\t\t'https://mir-s3-cdn-cf.behance.net/project_modules/max_1200/2cd83916611375.562aebbd4d825.jpg',\n\t\t'https://mir-s3-cdn-cf.behance.net/project_modules/max_1200/4975fe16611375.562aebbda1128.jpg',\n\t\t'https://mir-s3-cdn-cf.behance.net/project_modules/disp/211cfd16598783.562ae84b9b4b4.jpg'\n\t]"
         },
         "galleryOptions": {
             "type": "unknown",
